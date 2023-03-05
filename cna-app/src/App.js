@@ -22,6 +22,8 @@ import Row from 'react-bootstrap/Row';
 
 import {createElement } from '@syncfusion/ej2-base';
 import { DropDownList } from '@syncfusion/ej2-dropdowns';
+import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
+import { MultiSelect } from "react-multi-select-component";
 import { ListView } from '@syncfusion/ej2-lists';
 import { TextBox, NumericTextBox } from '@syncfusion/ej2-inputs'
 // import { scheduleData } from './datasource';
@@ -279,7 +281,6 @@ class App extends React.Component {
   // peticion get al backend para citas
   // Trae las citas disponibles en el sistema del backend previamente almacenadas
   getfetche = () => {  
-    console.log('test ==============222=======================');
     // var reader = new FileReader();
     
     // reader.readAsDataURL(text);
@@ -815,6 +816,11 @@ class App extends React.Component {
           let container_before = createElement('div', { className: 'custom-field-container' });
           
           // declaracion de la variable cnaApplicant
+          let inputM2t = createElement('input', {
+            className: 'e-multi-select-wrapper', attrs: { name: 'cnaMany2T' , id: 'cnaMany2T'}
+          });
+
+          // declaracion de la variable cnaApplicant
           let inputApplicant = createElement('input', {
             className: 'e-field', attrs: { name: 'cnaApplicant' , id: 'cnaApplicant'}
           });
@@ -907,6 +913,28 @@ class App extends React.Component {
           });
 
 
+          // test selecto many2manyTags
+          // const optionListMany2Tags = [
+          //   { value: "red", label: "Red" },
+          //   { value: "green", label: "Green" },
+          //   { value: "yellow", label: "Yellow" },
+          //   { value: "blue", label: "Blue" },
+          //   { value: "white", label: "White" }
+          // ];
+
+          const optionListMany2Tags =['Badminton', 'Basketball', 'Cricket', 'Football', 'Golf', 'Gymnastics', 'Hockey', 'Rugby', 'Snooker', 'Tennis'];
+
+          let multiSelectComponent = new MultiSelectComponent({
+            dataSource: optionListMany2Tags,
+            // options: optionListMany2Tags,
+            mode: "Box",
+            value: args.data.cnaApplicant,
+            // fields: { text: 'text', value: 'value' , validation: { required: true }},
+            loatLabelType: 'Always', placeholder: 'test m2mTags', popupHeight:"250px", popupWidth:"250px"
+          });
+          
+
+
           let d = [
             { text: 'Estoy de acuerdo con la Información registrada.', id:1 },
           ];
@@ -918,6 +946,7 @@ class App extends React.Component {
           container.appendChild(inputQunatityParticipants);
           container.appendChild(inputInventory);
           container.appendChild(inputApplicant);
+          container.appendChild(inputM2t);
           container.appendChild(inputCnaToken);
           container.appendChild(inputCnaRason);
           container.appendChild(inputCancelState);
@@ -1011,7 +1040,9 @@ class App extends React.Component {
           drowDownApplicant.appendTo(inputApplicant);
           inputApplicant.setAttribute('name', 'cnaApplicant');
           inputApplicant.setAttribute('validation', { required: true });
-
+          
+          multiSelectComponent.appendTo(inputM2t);
+          inputM2t.setAttribute('name', 'cnaMany2T');
 
           TextCnaToken.appendTo(inputCnaToken);
           inputCnaToken.setAttribute('name', 'cnaToken');
