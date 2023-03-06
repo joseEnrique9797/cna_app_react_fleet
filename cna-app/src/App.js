@@ -462,7 +462,7 @@ class App extends React.Component {
     const diff_data_check_box_scheduleData = data_check_box_scheduleData.filter(e => !data_check_box.includes(e))
     const diff_data_check_box = data_check_box.filter(e => !data_check_box_scheduleData.includes(e))
     
-    // fin bloque-=========================================
+    // fin bloque-========================================= test 222222
 
 
     // create ================================ test 222
