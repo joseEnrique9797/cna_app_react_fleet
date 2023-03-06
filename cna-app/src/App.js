@@ -458,13 +458,14 @@ class App extends React.Component {
       }
     }
     // calcula la diferencia en el checkBox (si existen cambios a registrar)
+    
     const diff_data_check_box_scheduleData = data_check_box_scheduleData.filter(e => !data_check_box.includes(e))
     const diff_data_check_box = data_check_box.filter(e => !data_check_box_scheduleData.includes(e))
     
     // fin bloque-=========================================
 
 
-    // create ================================
+    // create ================================ test 222
     if (arg.requestType === 'eventCreate') {
       if (arg.data[0].cnaQunatityParticipants === undefined) {
         arg.data[0].cnaQunatityParticipants = 1
