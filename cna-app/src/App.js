@@ -1,6 +1,8 @@
 import logo from './cna.png';
 import './App.css';
-import React from "react";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+// import React from "react";
 import text from './url.txt';
 
 import myJson from './url_text.json';
@@ -8,6 +10,7 @@ import axios from "axios";
 
 // const text_url = require("./url.txt");
 // const text_field = require("./url.txt");
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {Inject,ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, ResourcesDirective, ResourceDirective} from '@syncfusion/ej2-react-schedule';
@@ -22,8 +25,12 @@ import Row from 'react-bootstrap/Row';
 
 import {createElement } from '@syncfusion/ej2-base';
 import { DropDownList } from '@syncfusion/ej2-dropdowns';
+
+
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 import { MultiSelect } from "react-multi-select-component";
+import MulitselectDrop from '/Users/K/Documents/react_project/cna_app_react_fleet/cna-app/src/dataSource.json'
+
 import { ListView } from '@syncfusion/ej2-lists';
 import { TextBox, NumericTextBox } from '@syncfusion/ej2-inputs'
 // import { scheduleData } from './datasource';
@@ -199,6 +206,7 @@ class App extends React.Component {
     // const [updateDone, setUpdateDone] = useState(true);
     // const [update, setUpdate] = useState(true);
     // this.data = extend([], scheduleData, null, true);
+    this.multiSelectRef = React.createRef();
     this.state = {
       fecha: new Date(),
       scheduleData: null,
@@ -462,7 +470,7 @@ class App extends React.Component {
     const diff_data_check_box_scheduleData = data_check_box_scheduleData.filter(e => !data_check_box.includes(e))
     const diff_data_check_box = data_check_box.filter(e => !data_check_box_scheduleData.includes(e))
     
-    // fin bloque-========================================= test 222222
+    // fin bloque-=========================================
 
 
     // create ================================ test 222
@@ -768,7 +776,14 @@ class App extends React.Component {
     this.getApplicantfetche()
     // this.getEmployeefetcheasync();
     this.getInventoryfetche();
-
+    // const optionListMany2Tags =[{ Game: "Game 1", Id: 1 }, { Game: "Game 2", Id: 2 }];
+    // let multiSelectComponent = new MultiSelectComponent({
+    //   dataSource: optionListMany2Tags,
+    //   fields: { text: 'Game', value: 'Id' },
+    //   placeholder: 'm2m tags',
+    //   change: this.props.onChange // Asignamos la función onChange a la propiedad change
+    // });
+    // multiSelectComponent.appendTo(this.multiSelectRef.current);
     
   };
 
@@ -818,8 +833,10 @@ class App extends React.Component {
           
           // declaracion de la variable cnaApplicant
           let inputM2t = createElement('input', {
-            className: 'e-multi-select-wrapper', attrs: { name: 'cnaMany2T' , id: 'cnaMany2T'}
+            attrs: { name: 'cnaMany2T' , id: 'cnaMany2T', type:"text"}, type:"text"
           });
+
+          console.log('create m2m ======>', inputM2t)
 
           // declaracion de la variable cnaApplicant
           let inputApplicant = createElement('input', {
@@ -923,18 +940,26 @@ class App extends React.Component {
           //   { value: "white", label: "White" }
           // ];
 
-          const optionListMany2Tags =['Badminton', 'Basketball', 'Cricket', 'Football', 'Golf', 'Gymnastics', 'Hockey', 'Rugby', 'Snooker', 'Tennis'];
+          const optionListMany2Tags =[{ Game: "Game 1", Id: 1 }, { Game: "Game 2", Id: 2 }];
+          const fields={ text: "Game", value: "Game" };
 
+          // let multiSelectComponent = new MultiSelectComponent({
+          //   dataSource: optionListMany2Tags,
+          //   // fields: fields,
+          //   // onFilterChange: false,
+          //   fields: { text: 'Game', value: 'Id' },
+          //   placeholder: 'm2m tags'
+          // });
+          
           let multiSelectComponent = new MultiSelectComponent({
             dataSource: optionListMany2Tags,
-            // options: optionListMany2Tags,
-            mode: "Box",
-            value: args.data.cnaApplicant,
-            // fields: { text: 'text', value: 'value' , validation: { required: true }},
-            loatLabelType: 'Always', placeholder: 'test m2mTags', popupHeight:"250px", popupWidth:"250px"
+            fields: { text: 'Game', value: 'Id' },
+            placeholder: 'm2m tags'
           });
-          
 
+          // listObj.appendTo('#multi-select');
+          // multiSelectComponent.appendTo(inputM2t);
+          // inputM2t.setAttribute('name', 'cnaMany2T');
 
           let d = [
             { text: 'Estoy de acuerdo con la Información registrada.', id:1 },
@@ -944,10 +969,10 @@ class App extends React.Component {
             { text: 'Cancelar este evento .', id:1 },
           ];
 
+          container.appendChild(inputM2t);
           container.appendChild(inputQunatityParticipants);
           container.appendChild(inputInventory);
           container.appendChild(inputApplicant);
-          container.appendChild(inputM2t);
           container.appendChild(inputCnaToken);
           container.appendChild(inputCnaRason);
           container.appendChild(inputCancelState);
@@ -1059,8 +1084,77 @@ class App extends React.Component {
           inputConfirmSend.setAttribute('name', 'ConfirmSend');
 
           document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
+          document.getElementById('_dialog_wrapper').setAttribute('width', '57% !important;')
+          args.element.setAttribute('style', 'width: 57% !important;')
+
+          let multiSelectHtml = inputM2t.outerHTML;
+
+
+
+
+          document.getElementById('_dialog_wrapper_dialog-header').innerHTML=`<div id = "multiSelectContainer"></div>`;
           
-      
+          const multiSelectComponentTest = <MultiSelectComponent dataSource={optionListMany2Tags} fields={{ text: 'Game', value: 'Id' }} placeholder='m2m tags' />;
+          ReactDOM.render(multiSelectComponentTest, document.getElementById('multiSelectContainer'));
+
+
+          // document.getElementById('#multiSelectContainer').appendTo(multiSelectComponent);
+          console.log('test log ------->', multiSelectHtml )
+
+
+
+          
+          // document.getElementsByClassName('custom-field-container')[0].innerHTML = <MulitselectDrop></MulitselectDrop>
+          
+          // private sportsData = ['Badminton', 'Basketball', 'Cricket', 'Football', 'Golf', 'Gymnastics', 'Hockey', 'Rugby', 'Snooker', 'Tennis'];
+          
+        //   document.getElementsByClassName('custom-field-container')[0].innerHTML = `
+          
+        //   <div className="autcomplete-wrapper">
+        //   <div className="autcomplete">
+        //     <div className="w-full flex flex-col items-center mx-auto">
+        //       <div className="w-full">
+        //         <div className="flex flex-col items-center relative">
+        //           <div className="w-full ">
+        //             <div className="my-2 p-1 flex border border-gray-200 bg-white rounded ">
+        //               <div className="flex flex-auto flex-wrap">
+        //                 {selectedItems.map((tag, index) => {
+        //                   return (
+        //                     <div
+        //                       key={index}
+        //                       className="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300 "
+        //                     >
+        //                       <div className="text-xs font-normal leading-none max-w-full flex-initial">
+        //                         {tag}
+        //                       </div>
+        //                       <div className="flex flex-auto flex-row-reverse">
+        //                         <div>
+    
+        //                         </div>
+        //                       </div>
+        //                     </div>
+        //                   );
+        //                 })}
+        //                 <div className="flex-1">
+        //                   <input
+        //                     placeholder=""
+        //                     className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
+        //                   />
+        //                 </div>
+        //               </div>
+        //               <div className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200">
+        //                 <button className="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+    
+        //                 </button>
+        //               </div>
+        //             </div>
+        //           </div>
+        //         </div>
+        //       </div>
+        //     </div>
+        //   </div>
+        // </div>`
+          console.log(' from modal ====222====>',document.getElementsByClassName('custom-field-container')[0] )
           
           
       }
@@ -1121,7 +1215,8 @@ class App extends React.Component {
 
       document.getElementById('cnaToken').onchange = this.get_validate_required_fields  
       document.getElementById('cnaRoom_hidden').onchange = this.get_validate_required_fields  
-      document.getElementById('cnaEmployee_hidden').onchange = this.get_validate_required_fields 
+      // revert
+      // document.getElementById('cnaEmployee_hidden').onchange = this.get_validate_required_fields 
       
       // document.getElementById('cnaRason').onclick = this.get_confirmation
       document.getElementById('confirmSend').onclick = this.get_confirmation
@@ -1174,7 +1269,7 @@ class App extends React.Component {
               }
 
 
-              
+            
               
               
               <Col xs={2} style={{ textAlign: "left"}}> </Col>
