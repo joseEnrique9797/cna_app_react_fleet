@@ -3,6 +3,8 @@ import './App.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 // import React from "react";
+// "url":"https://prueba58.odis.in"
+    
 import text from './url.txt';
 
 import myJson from './url_text.json';
@@ -28,8 +30,6 @@ import { DropDownList } from '@syncfusion/ej2-dropdowns';
 
 
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
-import { MultiSelect } from "react-multi-select-component";
-import MulitselectDrop from '/Users/K/Documents/react_project/cna_app_react_fleet/cna-app/src/dataSource.json'
 
 import { ListView } from '@syncfusion/ej2-lists';
 import { TextBox, NumericTextBox } from '@syncfusion/ej2-inputs'
@@ -212,6 +212,8 @@ class App extends React.Component {
       scheduleData: null,
       romsData: [],
       employeeData: [],
+      locationData: [],
+      participantData: [],
       applicantData: [],
       inventoryData: [],
       DataisLoaded: null
@@ -348,7 +350,7 @@ class App extends React.Component {
   // peticion get al backend para salas
   // almacena todas las salas disponibles en el sistema para luego dejarlas disponible al agregar un evento desde el frontend
   getRoomfetche = () => {  
-    fetch (`${myJson['url']}/room/data`).then(res => res.json()).then(res => {
+    fetch (`${myJson['url']}/fleet/drivers/data`).then(res => res.json()).then(res => {
       this.setState({
         romsData: res,
       });
@@ -371,14 +373,40 @@ class App extends React.Component {
 
   // peticion get al backend para empleados
   // almacena todos los empleados disponibles en el sistema para luego mostrarlos en el frontend
+  getLocationfetche = () => {  
+    fetch (`${myJson['url']}/fleet/employeeDrive/data`).then(res => res.json()).then(res => {
+      this.setState({
+        locationData: res,
+      });
+    }).catch(function(error) {
+      DialogUtility.alert( {
+        content:"Ocurrio un error al traer los empleados #####disponibles. Contacte con el administrador.",
+        title : 'Información'
+      })
+    });
+  }
+  
   getEmployeefetche = () => {  
-    fetch (`${myJson['url']}/employee/data`).then(res => res.json()).then(res => {
+    fetch (`${myJson['url']}/fleet/employeeDrive/data`).then(res => res.json()).then(res => {
       this.setState({
         employeeData: res,
       });
     }).catch(function(error) {
       DialogUtility.alert( {
-        content:"Ocurrio un error al traer los empleados disponibles. Contacte con el administrador.",
+        content:"Ocurrio un error al traer los empleados #####disponibles. Contacte con el administrador.",
+        title : 'Información'
+      })
+    });
+  }
+
+  getParticipantsfetche = () => {  
+    fetch (`${myJson['url']}/fleet/participant/data`).then(res => res.json()).then(res => {
+      this.setState({
+        participantData: res,
+      });
+    }).catch(function(error) {
+      DialogUtility.alert( {
+        content:"Ocurrio un error al traer los participantes disponibles. Contacte con el administrador.",
         title : 'Información'
       })
     });
@@ -773,6 +801,8 @@ class App extends React.Component {
     this.getfetche();
     this.getRoomfetche();
     this.getEmployeefetche();
+    this.getLocationfetche();
+    this.getParticipantsfetche();
     this.getApplicantfetche()
     // this.getEmployeefetcheasync();
     this.getInventoryfetche();
@@ -812,8 +842,6 @@ class App extends React.Component {
         }
       };
 
-      // console.log('opciones de editar elemento===========33333333333333===========>', this.scheduleObj.eventWindow.recurrenceEditor)
-      // onsole.log('opciones de editar elemento===========44444444444444444===========>', this.scheduleObj.eventWindow.recurrenceEditor.endType.properties.dataSource , this.scheduleObj.eventWindow.recurrenceEditor.endType.listData)
       
 
       document.getElementsByClassName("e-control e-btn e-lib e-primary e-event-save e-flat")[0].setAttribute('style', 'display:None;')
@@ -825,49 +853,33 @@ class App extends React.Component {
           formElement.firstChild.insertBefore(row, formElement.firstChild.firstChild.nextSibling);
           let container = createElement('div', { className: 'custom-field-container' });
           
-          
-          let rowBefore = createElement('div', { className: 'custom-field-row' });
-          let formElementBefore = args.element.querySelector('.e-schedule-form');
-          formElementBefore.firstChild.insertBefore(rowBefore, formElementBefore.firstChild.firstChild);
-          let container_before = createElement('div', { className: 'custom-field-container' });
-          
-          // declaracion de la variable cnaApplicant
-          let inputM2t = createElement('input', {
-            attrs: { name: 'cnaMany2T' , id: 'cnaMany2T', type:"text"}, type:"text"
-          });
-
-          console.log('create m2m ======>', inputM2t)
-
-          // declaracion de la variable cnaApplicant
           let inputApplicant = createElement('input', {
             className: 'e-field', attrs: { name: 'cnaApplicant' , id: 'cnaApplicant'}
           });
 
-          // declaracion de la variable cnaEmployee
-          let inputEmployee = createElement('input', {
-            className: 'e-field', attrs: { name: 'cnaEmployee' , id: 'cnaEmployee'}
-          });
+          
 
 
           // array para cnaApplicant
           var arrayApplicant = []
           arrayApplicant = this.state.applicantData
           
-          rowBefore.appendChild(container_before);
           
-          // array para cnaEmployee
+          var arraylocation = []
+          var arrayParticipant = []
           var arrayEmployee = []
-          arrayEmployee = this.state.employeeData
-          container_before.appendChild(inputEmployee);
 
-          // declaracion de la variable cnaRoom
+          arrayEmployee = this.state.employeeData
+          arraylocation = this.state.applicantData
+          arrayParticipant = this.state.participantData
+          
+
+          
+          
           let inputEle = createElement('input', {
               className: 'e-field', attrs: { name: 'cnaRoom' , id: 'cnaRoom' }
           });
 
-          let inputQunatityParticipants = createElement('input', {
-            className: 'e-field', attrs: { name: 'cnaQunatityParticipants' , id: 'cnaQunatityParticipants' }
-          });
 
           // declaracion de la variable Inventory
           let inputInventory = createElement('input3', {
@@ -895,6 +907,10 @@ class App extends React.Component {
           let inputCancelState = createElement('input6', {
             className: 'e-cancel', attrs: { name: 'cnaCancelState', id: 'cnaCancelState', required: true}
           });
+
+          let inputEmployee = createElement('input', {
+            className: 'e-field', attrs: { name: 'cnaEmployee' , id: 'cnaEmployee'}
+          });
           
           
           // array para cnaRoom
@@ -909,17 +925,11 @@ class App extends React.Component {
             fields: { text: 'text', value: 'value'},
             value: args.data.cnaRoom,
             // nombre del campo padre, definido en la lista
-            floatLabelType: 'Always', placeholder: 'Sala'
+            floatLabelType: 'Always', placeholder: 'Vehiculo'
           });
 
-          let drowDownEmployee = new DropDownList({
-            // rellenar la data
-            dataSource: arrayEmployee,
-            fields: { text: 'text', value: 'value' , validation: { required: true }},
-            value: args.data.cnaEmployee,
-            // nombre del campo padre, definido en la lista
-            floatLabelType: 'Always', placeholder: 'Jefe de Unidad'
-          });
+          
+          
 
           let drowDownApplicant = new DropDownList({
             // rellenar la data
@@ -930,36 +940,16 @@ class App extends React.Component {
             floatLabelType: 'Always', placeholder: 'Solicitante'
           });
 
-
-          // test selecto many2manyTags
-          // const optionListMany2Tags = [
-          //   { value: "red", label: "Red" },
-          //   { value: "green", label: "Green" },
-          //   { value: "yellow", label: "Yellow" },
-          //   { value: "blue", label: "Blue" },
-          //   { value: "white", label: "White" }
-          // ];
-
-          const optionListMany2Tags =[{ Game: "Game 1", Id: 1 }, { Game: "Game 2", Id: 2 }];
-          const fields={ text: "Game", value: "Game" };
-
-          // let multiSelectComponent = new MultiSelectComponent({
-          //   dataSource: optionListMany2Tags,
-          //   // fields: fields,
-          //   // onFilterChange: false,
-          //   fields: { text: 'Game', value: 'Id' },
-          //   placeholder: 'm2m tags'
-          // });
-          
-          let multiSelectComponent = new MultiSelectComponent({
-            dataSource: optionListMany2Tags,
-            fields: { text: 'Game', value: 'Id' },
-            placeholder: 'm2m tags'
+          let drowDownEmployee = new DropDownList({
+            // rellenar la data
+            dataSource: arrayEmployee,
+            fields: { text: 'text', value: 'value' , validation: { required: true }},
+            value: args.data.cnaEmployee,
+            // nombre del campo padre, definido en la lista
+            floatLabelType: 'Always', placeholder: 'Conductor'
           });
 
-          // listObj.appendTo('#multi-select');
-          // multiSelectComponent.appendTo(inputM2t);
-          // inputM2t.setAttribute('name', 'cnaMany2T');
+          const optionListMany2Tags = arrayParticipant
 
           let d = [
             { text: 'Estoy de acuerdo con la Información registrada.', id:1 },
@@ -968,10 +958,11 @@ class App extends React.Component {
           let c = [
             { text: 'Cancelar este evento .', id:1 },
           ];
+          
 
-          container.appendChild(inputM2t);
-          container.appendChild(inputQunatityParticipants);
+          container.appendChild(inputEmployee);
           container.appendChild(inputInventory);
+          
           container.appendChild(inputApplicant);
           container.appendChild(inputCnaToken);
           container.appendChild(inputCnaRason);
@@ -981,20 +972,6 @@ class App extends React.Component {
           
           row.appendChild(container);
 
-          
-          
-          let ListViewInventory = new ListView({
-              //Set the data to datasource property
-              dataSource: this.state.inventoryData,
-              headerTitle: 'Requerimientos',
-              showHeader: true,
-              value: args.data.cnaInventory,
-              //Enable checkbox
-              showCheckBox: true,
-          });
-
-          
-          
           let ConfirmSend = new ListView({
             //Set the data to datasource property
             dataSource: d,
@@ -1022,32 +999,15 @@ class App extends React.Component {
             required : true
           });
 
-          
-          let numeric = new NumericTextBox({
-            format: '####',
-            value: args.data.cnaQunatityParticipants,
-            min: 1, 
-            floatLabelType: 'Always', placeholder: 'Cantidad de participantes'
-          });
-          
-          // let ListViewInventory = new ListView({
-          //   // rellenar la data
-          //   dataSource: d,
-          //   fields: { text: 'text', value: 'value' , validation: { required: true }},
-          //   value: d,
-          //   // nombre del campo padre, definido en la lista
-          //   floatLabelType: 'Always', placeholder: 'Lista inventario'
-          // });
-
-          // cnaRoom===========================
           drowDownList.appendTo(inputEle);
           inputEle.setAttribute('name', 'cnaRoom');
           inputEle.setAttribute('validation', { required: true });
           
-          // numeric===========================
-          numeric.appendTo(inputQunatityParticipants);
-          inputQunatityParticipants.setAttribute('name', 'cnaQunatityParticipants');
 
+          
+
+          
+          
 
           // cnaEmployee=====================================
           drowDownEmployee.appendTo(inputEmployee);
@@ -1055,20 +1015,11 @@ class App extends React.Component {
           inputEmployee.setAttribute('validation', { required: true });
 
           
-          // cnaInventory=====================================
-
-          // inputInventory.getElementsByClassName("e-list-item e-level-1 e-checklist").setAttribute('className', 'e-field');
-          ListViewInventory.appendTo(inputInventory);
-          inputInventory.setAttribute('name', 'cnaInventory');
-
-          
           // cnaApplicant=====================================
           drowDownApplicant.appendTo(inputApplicant);
           inputApplicant.setAttribute('name', 'cnaApplicant');
           inputApplicant.setAttribute('validation', { required: true });
           
-          multiSelectComponent.appendTo(inputM2t);
-          inputM2t.setAttribute('name', 'cnaMany2T');
 
           TextCnaToken.appendTo(inputCnaToken);
           inputCnaToken.setAttribute('name', 'cnaToken');
@@ -1085,78 +1036,50 @@ class App extends React.Component {
 
           document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
           document.getElementById('_dialog_wrapper').setAttribute('width', '57% !important;')
-          args.element.setAttribute('style', 'width: 57% !important;')
-
-          let multiSelectHtml = inputM2t.outerHTML;
-
-
-
-
-          document.getElementById('_dialog_wrapper_dialog-header').innerHTML=`<div id = "multiSelectContainer"></div>`;
+          args.element.setAttribute('style', 'width: 57% !important; height: 87%; max-height: 999px;')
           
-          const multiSelectComponentTest = <MultiSelectComponent dataSource={optionListMany2Tags} fields={{ text: 'Game', value: 'Id' }} placeholder='m2m tags' />;
+          
+
+          
+          let rowBefore = createElement('div', { className: 'custom-field-row' });
+          let formElementBefore =    args.element.querySelector('.e-subject-container');
+          
+
+          
+          formElementBefore.firstChild.insertBefore(rowBefore, formElementBefore.firstChild.nextSibling);
+          let container_before = createElement('div', { className: 'custom-field-container' });
+          
+          rowBefore.appendChild(container_before);
+          
+          let inputLocation = createElement('input', {
+            className: 'e-field', attrs: { name: 'cnaLocation' , id: 'cnaLocation' }
+          });
+
+          container_before.appendChild(inputLocation);
+
+          let drowDownLocation = new DropDownList({
+            // rellenar la data
+            dataSource: arraylocation,
+            fields: { text: 'text', value: 'value' , validation: { required: true }},
+            value: args.data.cnaEmployee,
+            // nombre del campo padre, definido en la lista
+            floatLabelType: 'Always', placeholder: 'Lugar de visita'
+          });
+
+
+          drowDownLocation.appendTo(inputLocation);
+          inputLocation.setAttribute('name', 'cnaLocation');
+          
+
+          // insert para el campo m2m tags
+          var mydiv = document.getElementsByClassName('custom-field-container')[0]
+          var g = document.createElement('div');
+          g.setAttribute("id", "multiSelectContainer");
+          mydiv.appendChild(g);
+          const multiSelectComponentTest = <MultiSelectComponent dataSource={optionListMany2Tags} fields={{ text: 'text', value: 'id' }} placeholder='Participantes' />;
           ReactDOM.render(multiSelectComponentTest, document.getElementById('multiSelectContainer'));
+          // insert para el campo m2m tags
 
-
-          // document.getElementById('#multiSelectContainer').appendTo(multiSelectComponent);
-          console.log('test log ------->', multiSelectHtml )
-
-
-
-          
-          // document.getElementsByClassName('custom-field-container')[0].innerHTML = <MulitselectDrop></MulitselectDrop>
-          
-          // private sportsData = ['Badminton', 'Basketball', 'Cricket', 'Football', 'Golf', 'Gymnastics', 'Hockey', 'Rugby', 'Snooker', 'Tennis'];
-          
-        //   document.getElementsByClassName('custom-field-container')[0].innerHTML = `
-          
-        //   <div className="autcomplete-wrapper">
-        //   <div className="autcomplete">
-        //     <div className="w-full flex flex-col items-center mx-auto">
-        //       <div className="w-full">
-        //         <div className="flex flex-col items-center relative">
-        //           <div className="w-full ">
-        //             <div className="my-2 p-1 flex border border-gray-200 bg-white rounded ">
-        //               <div className="flex flex-auto flex-wrap">
-        //                 {selectedItems.map((tag, index) => {
-        //                   return (
-        //                     <div
-        //                       key={index}
-        //                       className="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300 "
-        //                     >
-        //                       <div className="text-xs font-normal leading-none max-w-full flex-initial">
-        //                         {tag}
-        //                       </div>
-        //                       <div className="flex flex-auto flex-row-reverse">
-        //                         <div>
-    
-        //                         </div>
-        //                       </div>
-        //                     </div>
-        //                   );
-        //                 })}
-        //                 <div className="flex-1">
-        //                   <input
-        //                     placeholder=""
-        //                     className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
-        //                   />
-        //                 </div>
-        //               </div>
-        //               <div className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200">
-        //                 <button className="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
-    
-        //                 </button>
-        //               </div>
-        //             </div>
-        //           </div>
-        //         </div>
-        //       </div>
-        //     </div>
-        //   </div>
-        // </div>`
-          console.log(' from modal ====222====>',document.getElementsByClassName('custom-field-container')[0] )
-          
-          
       }
       else{
         document.getElementById('cnaToken').setAttribute('style', 'display:block;   -webkit-text-security: disc; ')
@@ -1215,8 +1138,7 @@ class App extends React.Component {
 
       document.getElementById('cnaToken').onchange = this.get_validate_required_fields  
       document.getElementById('cnaRoom_hidden').onchange = this.get_validate_required_fields  
-      // revert
-      // document.getElementById('cnaEmployee_hidden').onchange = this.get_validate_required_fields 
+      document.getElementById('cnaEmployee_hidden').onchange = this.get_validate_required_fields 
       
       // document.getElementById('cnaRason').onclick = this.get_confirmation
       document.getElementById('confirmSend').onclick = this.get_confirmation
@@ -1281,7 +1203,7 @@ class App extends React.Component {
               id: 'Id',
               // cnaRoom: { validation: { required: true } },
               cnaToken: { name: 'cnaToken', title: 'Token', validation: { required: true } },
-              subject: { name: 'name', title: 'Nombre de Evento y responsable' , validation: { required: true }},
+              subject: { name: 'name', title: 'Actividad' , validation: { required: true }},
               location: { name: 'Locacion', title: 'Descripcion de la locación' },
               description: { name: 'Description', title: 'Descripcion del evento' },
               startTime: { name: 'StartTime', title: 'Desde' },
