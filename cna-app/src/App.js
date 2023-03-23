@@ -210,6 +210,7 @@ class App extends React.Component {
     this.state = {
       fecha: new Date(),
       scheduleData: null,
+      multiSelectComponentTest: null,
       state: '',
       romsData: [],
       employeeData: [],
@@ -308,6 +309,10 @@ class App extends React.Component {
             cnaApplicant: res[property]['cnaApplicant'],
             cnaEmployeeName :  res[property]['cnaEmployeeName'],
             cnaParticipants :  res[property]['participant_ids'],
+
+            cnaVehicleName :  res[property]['cnaVehicleName'],
+            cnaDriveName :  res[property]['cnaDriveName'],
+
             cnalocation :  res[property]['cnalocation'],
             Description :  (res[property]['Description']),
             cnaInventory :  res[property]['check_box'],
@@ -343,6 +348,8 @@ class App extends React.Component {
       });
 
       let body = '<div style ="text-align:center; font-size: 18px"> Vehiculos :'
+
+      console.log('data room =========================>', this.state.romsData)
       for (var obj_i in this.state.romsData) {
         body = body + (`<h6  style=" color: white ; font-size: 18px ; margin-left: 16px;display: inline; width: 30% ;background-color: ${this.state.romsData[obj_i].RoomColor} " >   ${this.state.romsData[obj_i].text}   </h6>`) 
       }
@@ -774,17 +781,35 @@ class App extends React.Component {
     //     name_employe = this.state.employeeData[index].text
     //   }
     // }
-    let name_employee = args.data.cnaEmployeeName
+    let name_employee = args.data.name
 
-    if (name_employee === undefined) {
-      for ( var index in  this.state.employeeData) {
-        if (args.data.cnaEmployee === this.state.employeeData[index].value) {
-          name_employee = this.state.employeeData[index].text
-        }
-      }
-    }
+    // if (name_employee === undefined) {
+    //   for ( var index in  this.state.employeeData) {
+    //     if (args.data.cnaEmployee === this.state.employeeData[index].value) {
+    //       name_employee = this.state.employeeData[index].text
+    //     }
+    //   }
+    // }
     
-    args.element.innerHTML =  "<div class=\"e-appointment-details\"><div class=\"e-subject\">" + name_employee + "</div> <div class=\"e-subject\">" + args.data.name + "</div><div class=\"e-time\">" +  args.element.innerText.replace(args.data.name, "") + "</div></div>"
+    var style_state = ''
+    var state_translation = ''
+    // args.data.state
+    if (args.data.state === 'request') {
+      state_translation = 'SOLICITUD'
+      style_state = "text-align:center;background-color:yellow"
+    }
+
+    if (args.data.state === 'assign') {
+      state_translation = 'ASIGNADO'
+      style_state = "text-align:center;background-color:green"
+    }
+
+
+    console.log('data state =============$$$$$$$$$$$$$=============>', args.data  )
+    
+    
+    
+    args.element.innerHTML =  "<div class=\"e-appointment-details\"> <h6 style = "+ style_state + " >"+  state_translation +"</h6> <div class=\"e-subject\">" + name_employee + "</div> <div class=\"e-subject\">" + args.data.cnaDriveName + "</div><div class=\"e-time\">" + args.data.cnaVehicleName  + "</div></div>"
     
     if (args.data.CategoryColor === undefined ) {
       for ( var index in  this.state.romsData) {
@@ -833,7 +858,6 @@ class App extends React.Component {
 
   onPopupOpen(args) {
     // opcion para editar la ventana, agregar campos nuevos a la modal de registro
-    console.log('load wizard =====================>', args.data)
     if (args.type === 'Editor') {
       
       var recurrence = document.querySelector(".e-recurrenceeditor").ej2_instances[0];
@@ -864,7 +888,6 @@ class App extends React.Component {
       document.getElementsByClassName("e-control e-btn e-lib e-event-cancel e-flat")[0].setAttribute('style', 'display:None;')
       this.scheduleObj.eventWindow.recurrenceEditor.frequencies = ['none', 'daily', 'weekly'];
       if (!args.element.querySelector('.custom-field-row')) {
-          console.log('else =aaaa===================>')
           let row = createElement('div', { className: 'custom-field-row' });
           let formElement = args.element.querySelector('.e-schedule-form').querySelector('.e-description-row');
           formElement.firstChild.insertBefore(row, formElement.firstChild.firstChild.nextSibling);
@@ -1097,8 +1120,9 @@ class App extends React.Component {
           // value = {[1534, 1511]}
           // value = {[1534, 1511]}
           // change={this.onChange()}
-          const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}  value={this.onChange(args.data)}  onChange={(e) => this.onChange(e.value)}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
-          ReactDOM.render(multiSelectComponentTest, document.getElementById('multiSelectContainer'));
+          const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}  onChange={(e) => this.onChange(e)} change={(e) => this.onChange(e)}   value={this.onChange(args.data)}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
+          this.state.multiSelectComponentTest = multiSelectComponentTest 
+          ReactDOM.render(this.state.multiSelectComponentTest, document.getElementById('multiSelectContainer'));
           // insert para el campo m2m tags
 
       }
@@ -1134,7 +1158,9 @@ class App extends React.Component {
           }
         }
       }
+
       
+
       //ventana de eventos nueva 
       // resetea los check box
       if ( args.data.Id === undefined ) {
@@ -1161,59 +1187,26 @@ class App extends React.Component {
 
       }
       else{
-        var spam1 = ''
-        var spam2 = ''
-        var spam3 = ''
-        var count = 0
-        args.data.cnaParticipants.forEach((currentElement) => { 
-          spam1 += `<span class="e-chips" data-value="${currentElement['value']}" title="${currentElement['text']}"><span class="e-chipcontent">${currentElement['text']}</span><span class="e-chips-close"></span></span>`
-          spam2 += `<option selected="" value="${currentElement['value']}">${count}</option>` 
-          spam3 += `${currentElement['text']},`
-          count += 1
-        })
-        // this.participantData
+        var arrayParticipant = []
+        arrayParticipant = this.state.participantData
+        const optionListMany2Tags = arrayParticipant 
+        // onChange={(e) => this.onChange(e)} change={(e) => this.onChange(e)}
+        const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}     value={this.onChange(args.data)}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
+        this.state.multiSelectComponentTest = multiSelectComponentTest 
+        ReactDOM.render(this.state.multiSelectComponentTest, document.getElementById('multiSelectContainer'));
         
-
-
-        var m2m_tags_participants = document.getElementsByClassName("e-multi-hidden")[0];
-        var html_spam1 = document.getElementsByClassName("e-chips-collection")[0];
-        var html_span3 = document.getElementsByClassName("e-delim-view e-delim-values")[0];
-        
-        
-        // <option selected="" value="1534">0</option>
-        // [Log] assign default particpant=========> (bundle.js, line 1060)
-        
-        
-        // html_spam1.innerHTML = spam1
-        // html_spam1.setAttribute('style', '-webkit--webkit-box;') 
-
-        // html_span3.innerHTML = spam3
-        // html_span3.setAttribute('style', '-webkit--webkit-box;') 
-        
-        
-        // m2m_tags_participants.innerHTML = spam2
-
-        // m2m_tags_participants.innerHTML = `<select aria-hidden="true" class="e-multi-hidden" tabindex="-1" multiple name="m2m_tags_participants222"> <option selected="" value="1534">0</option> </select>`;
-        
-        console.log('assign default particpant=========>',args.data);
-        // ReactDOM.render(m2m_tags_participants, document.getElementsByClassName("e-multi-hidden")[0]);
-        
-        var option = document.createElement("option");
-        option.text = "Kiwi";
-        option.value = 1534;
-        // m2m_tags_participants.(option);
-
-
-        // document.getElementById('m2m_tags_participants').value = '{[1534, 1511]}'
-        // document.getElementById('m2m_tags_participants').setAttribute('value', 'display:block;   -webkit-text-security: disc; ')
-
         if (args.data.state ===  'request') {
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;')
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;')
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;');
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;');
         }
         else{
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:flex;')
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:flex;')
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:flex;');
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:flex;');
+          
+          // campos readonly 
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('readonly', 'true;');
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('readonly', 'true;');
+          // $('#myFormID :input').setAttribute();
         }
         
       }
@@ -1257,12 +1250,21 @@ class App extends React.Component {
   
   
   onChange(e) { 
-    var array_participants = []
-    e.cnaParticipants.forEach((currentElement) => { 
+    console.log('data onchange ######111111111###################', e, array_participants)
+    
+    if (e.cnaParticipants) {
+      var array_participants = []
+      e.cnaParticipants.forEach((currentElement) => { 
+        array_participants.push(currentElement['value'])
+      })  
+
+      console.log('data onchange ########222222222#################', e, array_participants)
       
-      array_participants.push(currentElement['value'])
-    })
-    return array_participants
+      // this.state.multiSelectComponentTest.props.value = array_participants
+      return array_participants;
+    }
+    
+    return false;
   } 
   
   // MAIN
