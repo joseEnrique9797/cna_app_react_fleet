@@ -210,6 +210,7 @@ class App extends React.Component {
     this.state = {
       fecha: new Date(),
       scheduleData: null,
+      state: '',
       romsData: [],
       employeeData: [],
       locationData: [],
@@ -291,24 +292,8 @@ class App extends React.Component {
   // peticion get al backend para citas
   // Trae las citas disponibles en el sistema del backend previamente almacenadas
   getfetche = () => {  
-    // var reader = new FileReader();
     
-    // reader.readAsDataURL(text);
-    // let fetchData = async()=> {
-      
-    //   console.log(final)
-    // }
-
-    // let resp =  axios.get("./url.txt");
-    // let final =  resp.text();
-    // reader.readAsText(file); 
-    // var x = this.loadFile("./url.txt")
-
-    
-
-    // fileReader.readAsText(x);
-    console.log(  myJson['url'] );
-    fetch (`${myJson['url']}/calendar/data`).then(res => res.json()).then(res => {
+    fetch (`${myJson['url']}/appointmentFleet/data`).then(res => res.json()).then(res => {
       var array = []
       // var count = 0
       if (res) {
@@ -316,14 +301,15 @@ class App extends React.Component {
           array.push({
             Id: res[property]['external_id'],
             CategoryColor:  res[property]['CategoryColor'],
+            state:  res[property]['state'],
             RecurrenceRule: res[property]['RecurrenceRule'],
             name:  res[property]['Subject'],
             cnaEmployee :  res[property]['cnaEmployee'],
             cnaApplicant: res[property]['cnaApplicant'],
             cnaEmployeeName :  res[property]['cnaEmployeeName'],
-            cnaQunatityParticipants :  res[property]['cnaQunatityParticipants'],
-            Locacion :  res[property]['Locacion'],
-            Description :  res[property]['Description'],
+            cnaParticipants :  res[property]['participant_ids'],
+            cnalocation :  res[property]['cnalocation'],
+            Description :  (res[property]['Description']),
             cnaInventory :  res[property]['check_box'],
             cnaRoom :  res[property]['cnaroom'],
             StartTime: new Date( res[property]['StartTime']['year'],  res[property]['StartTime']['month'],  res[property]['StartTime']['day'],  res[property]['StartTime']['hour'],  res[property]['StartTime']['minute']),
@@ -341,18 +327,19 @@ class App extends React.Component {
       // return res
     }).catch(function(error) {
       DialogUtility.alert( {
-        content:"No se puede conectar con el backend. Contacte con el administrador.",
+        content:"No se puede conectar 222222222 con el backend. Contacte con el administrador.",
         title : 'Información'
       })
     });
   }
 
-  // peticion get al backend para salas
-  // almacena todas las salas disponibles en el sistema para luego dejarlas disponible al agregar un evento desde el frontend
-  getRoomfetche = () => {  
-    fetch (`${myJson['url']}/fleet/drivers/data`).then(res => res.json()).then(res => {
+  getAllObjectfetche = () => {  
+    fetch (`${myJson['url']}/fleet/dataObjects/data`).then(res => res.json()).then(res => {
       this.setState({
-        romsData: res,
+        participantData: res.data_participant,
+        locationData: res.data_location,
+        romsData: res.data_vehicle,
+        employeeData: res.data_drivers,
       });
 
       let body = '<div style ="text-align:center; font-size: 18px"> Salas :'
@@ -361,58 +348,81 @@ class App extends React.Component {
       }
       body = body  + '</div>'
       document.getElementById('list_room_color').insertAdjacentHTML("beforebegin",body)
-    
+      
     }).catch(function(error) {
       DialogUtility.alert( {
-        content:"Ocurrio un error al traer las salas disponibles. Contacte con el administrador.",
-        title : 'Información'
-      })
-    });
-  }
-
-
-  // peticion get al backend para empleados
-  // almacena todos los empleados disponibles en el sistema para luego mostrarlos en el frontend
-  getLocationfetche = () => {  
-    fetch (`${myJson['url']}/fleet/employeeDrive/data`).then(res => res.json()).then(res => {
-      this.setState({
-        locationData: res,
-      });
-    }).catch(function(error) {
-      DialogUtility.alert( {
-        content:"Ocurrio un error al traer los empleados #####disponibles. Contacte con el administrador.",
+        content:"test data 1111.",
         title : 'Información'
       })
     });
   }
   
-  getEmployeefetche = () => {  
-    fetch (`${myJson['url']}/fleet/employeeDrive/data`).then(res => res.json()).then(res => {
-      this.setState({
-        employeeData: res,
-      });
-    }).catch(function(error) {
-      DialogUtility.alert( {
-        content:"Ocurrio un error al traer los empleados #####disponibles. Contacte con el administrador.",
-        title : 'Información'
-      })
-    });
-  }
+  
+  // peticion get al backend para salas
+  // almacena todas las salas disponibles en el sistema para luego dejarlas disponible al agregar un evento desde el frontend
+  // quitar
+  // getRoomfetche = () => {  
+  //   fetch (`${myJson['url']}/fleet/drivers/data`).then(res => res.json()).then(res => {
+  //     this.setState({
+        
+  //     });
 
-  getParticipantsfetche = () => {  
-    fetch (`${myJson['url']}/fleet/participant/data`).then(res => res.json()).then(res => {
-      this.setState({
-        participantData: res,
-      });
-    }).catch(function(error) {
-      DialogUtility.alert( {
-        content:"Ocurrio un error al traer los participantes disponibles. Contacte con el administrador.",
-        title : 'Información'
-      })
-    });
-  }
+      
+    
+  //   }).catch(function(error) {
+  //     DialogUtility.alert( {
+  //       content:"Ocurrio un error al traer las salas disponibles. Contacte con el administrador.",
+  //       title : 'Información'
+  //     })
+  //   });
+  // }
 
 
+  // peticion get al backend para empleados
+  // almacena todos los empleados disponibles en el sistema para luego mostrarlos en el frontend
+
+  // quitar
+  // getLocationfetche = () => {  
+  //   fetch (`${myJson['url']}/fleet/location/data`).then(res => res.json()).then(res => {
+  //     this.setState({
+  //       locationData: res,
+  //     });
+  //   }).catch(function(error) {
+  //     DialogUtility.alert( {
+  //       content:"Ocurrio un error al traer las locaciónes disponibles. Contacte con el administrador.",
+  //       title : 'Información'
+  //     })
+  //   });
+  // }
+
+  // quitar
+  // getEmployeefetche = () => {  
+  //   fetch (`${myJson['url']}/fleet/employeeDrive/data`).then(res => res.json()).then(res => {
+  //     this.setState({
+  //       employeeData: res,
+  //     });
+  //   }).catch(function(error) {
+  //     DialogUtility.alert( {
+  //       content:"Ocurrio un error al traer los empleados #####disponibles. Contacte con el administrador.",
+  //       title : 'Información'
+  //     })
+  //   });
+  // }
+
+
+  // quitar
+  // getParticipantsfetche = () => {  
+  //   fetch (`${myJson['url']}/fleet/participant/data`).then(res => res.json()).then(res => {
+  //     this.setState({
+  //       participantData: res,
+  //     });
+  //   }).catch(function(error) {
+  //     DialogUtility.alert( {
+  //       content:"Ocurrio un error al traer los participantes disponibles. Contacte con el administrador.",
+  //       title : 'Información'
+  //     })
+  //   });
+  // }
 
   getApplicantfetche = () => {  
     fetch (`${myJson['url']}/applicant/data`).then(res => res.json()).then(res => {
@@ -420,10 +430,10 @@ class App extends React.Component {
         applicantData: res,
       });
     }).catch(function(error) {
-      DialogUtility.alert( {
-        content:"Ocurrio un error al traer los solicitantes disponibles. Contacte con el administrador.",
-        title : 'Información'
-      })
+      // DialogUtility.alert( {
+      //   content:"Ocurrio un error al traer los solicitantes disponibles. Contacte con el administrador.",
+      //   title : 'Información'
+      // })
     });
   }
   
@@ -449,10 +459,10 @@ class App extends React.Component {
         inventoryData: res,
       });
     }).catch(function(error) {
-      DialogUtility.alert( {
-        content:"Ocurrio un error al traer los requerimientos. Contacte con el administrador.",
-        title : 'Información'
-      })
+      // DialogUtility.alert( {
+      //   content:"Ocurrio un error al traer los requerimientos. Contacte con el administrador.",
+      //   title : 'Información'
+      // })
     });
   }
 
@@ -799,10 +809,14 @@ class App extends React.Component {
   // fetch al recargar el doom
   componentDidMount(prevProps) {
     this.getfetche();
-    this.getRoomfetche();
-    this.getEmployeefetche();
-    this.getLocationfetche();
-    this.getParticipantsfetche();
+    // quitar
+    // this.getRoomfetche();
+    this.getAllObjectfetche();
+    // this.getEmployeefetche();
+    // quitar
+    // this.getLocationfetche();
+    // quitar 
+    // this.getParticipantsfetche();
     this.getApplicantfetche()
     // this.getEmployeefetcheasync();
     this.getInventoryfetche();
@@ -819,11 +833,13 @@ class App extends React.Component {
 
   onPopupOpen(args) {
     // opcion para editar la ventana, agregar campos nuevos a la modal de registro
+    console.log('load wizard =====================>', args.data)
     if (args.type === 'Editor') {
       
       var recurrence = document.querySelector(".e-recurrenceeditor").ej2_instances[0];
       recurrence.change = function (args) {
         document.getElementsByClassName("e-input-wrapper e-interval e-form-right")[0].setAttribute('style', 'display:None;')
+        document.getElementsByClassName("e-editor")[0].setAttribute('style', 'display:None;')
 
         if (args.value) {
             var repeatType = args.value.split("=")[1].split(";")[0];
@@ -848,6 +864,7 @@ class App extends React.Component {
       document.getElementsByClassName("e-control e-btn e-lib e-event-cancel e-flat")[0].setAttribute('style', 'display:None;')
       this.scheduleObj.eventWindow.recurrenceEditor.frequencies = ['none', 'daily', 'weekly'];
       if (!args.element.querySelector('.custom-field-row')) {
+          console.log('else =aaaa===================>')
           let row = createElement('div', { className: 'custom-field-row' });
           let formElement = args.element.querySelector('.e-schedule-form').querySelector('.e-description-row');
           formElement.firstChild.insertBefore(row, formElement.firstChild.firstChild.nextSibling);
@@ -870,7 +887,7 @@ class App extends React.Component {
           var arrayEmployee = []
 
           arrayEmployee = this.state.employeeData
-          arraylocation = this.state.applicantData
+          arraylocation = this.state.locationData
           arrayParticipant = this.state.participantData
           
 
@@ -1001,6 +1018,7 @@ class App extends React.Component {
 
           drowDownList.appendTo(inputEle);
           inputEle.setAttribute('name', 'cnaRoom');
+          inputEle.setAttribute('id', 'cnaRoom');
           inputEle.setAttribute('validation', { required: true });
           
 
@@ -1036,7 +1054,7 @@ class App extends React.Component {
 
           document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
           document.getElementById('_dialog_wrapper').setAttribute('width', '57% !important;')
-          args.element.setAttribute('style', 'width: 57% !important; height: 87%; max-height: 999px;')
+          args.element.setAttribute('style', 'width: 57% !important; height: 82%; max-height: 999px;')
           
           
 
@@ -1061,7 +1079,7 @@ class App extends React.Component {
             // rellenar la data
             dataSource: arraylocation,
             fields: { text: 'text', value: 'value' , validation: { required: true }},
-            value: args.data.cnaEmployee,
+            value: args.data.cnalocation,
             // nombre del campo padre, definido en la lista
             floatLabelType: 'Always', placeholder: 'Lugar de visita'
           });
@@ -1076,11 +1094,15 @@ class App extends React.Component {
           var g = document.createElement('div');
           g.setAttribute("id", "multiSelectContainer");
           mydiv.appendChild(g);
-          const multiSelectComponentTest = <MultiSelectComponent dataSource={optionListMany2Tags} fields={{ text: 'text', value: 'id' }} placeholder='Participantes' />;
+          // value = {[1534, 1511]}
+          // value = {[1534, 1511]}
+          // change={this.onChange()}
+          const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}  value={this.onChange(args.data)}  onChange={(e) => this.onChange(e.value)}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
           ReactDOM.render(multiSelectComponentTest, document.getElementById('multiSelectContainer'));
           // insert para el campo m2m tags
 
       }
+
       else{
         document.getElementById('cnaToken').setAttribute('style', 'display:block;   -webkit-text-security: disc; ')
         document.getElementById('cnaCancelState').setAttribute('style', 'display:block;')
@@ -1116,6 +1138,9 @@ class App extends React.Component {
       //ventana de eventos nueva 
       // resetea los check box
       if ( args.data.Id === undefined ) {
+        document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;')
+        document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;')
+        // document.getElementById('cnaRoom').setAttribute('style', 'display:None;')
         // resetea los elementos seleccionados en el checBox
         for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
           if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
@@ -1135,7 +1160,63 @@ class App extends React.Component {
         document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
 
       }
+      else{
+        var spam1 = ''
+        var spam2 = ''
+        var spam3 = ''
+        var count = 0
+        args.data.cnaParticipants.forEach((currentElement) => { 
+          spam1 += `<span class="e-chips" data-value="${currentElement['value']}" title="${currentElement['text']}"><span class="e-chipcontent">${currentElement['text']}</span><span class="e-chips-close"></span></span>`
+          spam2 += `<option selected="" value="${currentElement['value']}">${count}</option>` 
+          spam3 += `${currentElement['text']},`
+          count += 1
+        })
+        // this.participantData
+        
 
+
+        var m2m_tags_participants = document.getElementsByClassName("e-multi-hidden")[0];
+        var html_spam1 = document.getElementsByClassName("e-chips-collection")[0];
+        var html_span3 = document.getElementsByClassName("e-delim-view e-delim-values")[0];
+        
+        
+        // <option selected="" value="1534">0</option>
+        // [Log] assign default particpant=========> (bundle.js, line 1060)
+        
+        
+        // html_spam1.innerHTML = spam1
+        // html_spam1.setAttribute('style', '-webkit--webkit-box;') 
+
+        // html_span3.innerHTML = spam3
+        // html_span3.setAttribute('style', '-webkit--webkit-box;') 
+        
+        
+        // m2m_tags_participants.innerHTML = spam2
+
+        // m2m_tags_participants.innerHTML = `<select aria-hidden="true" class="e-multi-hidden" tabindex="-1" multiple name="m2m_tags_participants222"> <option selected="" value="1534">0</option> </select>`;
+        
+        console.log('assign default particpant=========>',args.data);
+        // ReactDOM.render(m2m_tags_participants, document.getElementsByClassName("e-multi-hidden")[0]);
+        
+        var option = document.createElement("option");
+        option.text = "Kiwi";
+        option.value = 1534;
+        // m2m_tags_participants.(option);
+
+
+        // document.getElementById('m2m_tags_participants').value = '{[1534, 1511]}'
+        // document.getElementById('m2m_tags_participants').setAttribute('value', 'display:block;   -webkit-text-security: disc; ')
+
+        if (args.data.state ===  'request') {
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;')
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;')
+        }
+        else{
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:flex;')
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:flex;')
+        }
+        
+      }
       document.getElementById('cnaToken').onchange = this.get_validate_required_fields  
       document.getElementById('cnaRoom_hidden').onchange = this.get_validate_required_fields  
       document.getElementById('cnaEmployee_hidden').onchange = this.get_validate_required_fields 
@@ -1173,6 +1254,17 @@ class App extends React.Component {
       args.cancel = true;
     }
   }
+  
+  
+  onChange(e) { 
+    var array_participants = []
+    e.cnaParticipants.forEach((currentElement) => { 
+      
+      array_participants.push(currentElement['value'])
+    })
+    return array_participants
+  } 
+  
   // MAIN
   // renderiza el componente principal
   render() {
@@ -1204,7 +1296,7 @@ class App extends React.Component {
               // cnaRoom: { validation: { required: true } },
               cnaToken: { name: 'cnaToken', title: 'Token', validation: { required: true } },
               subject: { name: 'name', title: 'Actividad' , validation: { required: true }},
-              location: { name: 'Locacion', title: 'Descripcion de la locación' },
+              location: { name: 'cnalocation', title: 'Descripcion de la locación' },
               description: { name: 'Description', title: 'Descripcion del evento' },
               startTime: { name: 'StartTime', title: 'Desde' },
               endTime: { name: 'EndTime', title: 'Hasta' },
