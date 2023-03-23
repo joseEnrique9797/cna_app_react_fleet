@@ -1279,7 +1279,7 @@ class App extends React.Component {
               <Col xs={3}><img src={logo} alt="logo" style={{ width: 214}} /></Col>
               
               {window.screen.width >= 900 ?   
-                <Col xs={7} style={{ textAlign: "center"}}><text style={{ fontWeight: 600}} >CONSEJO NACIONAL ANTICORRUPCIÓN</text> <br></br>    <text>ADMINISTRACIÓN Y RECURSOS HUMANOS</text> <br></br>  <text>Reserva de salas</text>  <br></br> <div id= "list_room_color">  </div> <br></br> </Col>          :       <text></text> 
+                <Col xs={7} style={{ textAlign: "center"}}><text style={{ fontWeight: 600}} >CONSEJO NACIONAL ANTICORRUPCIÓN</text> <br></br>    <text>ADMINISTRACIÓN Y RECURSOS HUMANOS</text> <br></br>  <text>Reserva de vehiculos</text>  <br></br> <div id= "list_room_color">  </div> <br></br> </Col>          :       <text></text> 
               }
 
 
