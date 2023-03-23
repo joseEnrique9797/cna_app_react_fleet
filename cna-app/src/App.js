@@ -342,7 +342,7 @@ class App extends React.Component {
         employeeData: res.data_drivers,
       });
 
-      let body = '<div style ="text-align:center; font-size: 18px"> Salas :'
+      let body = '<div style ="text-align:center; font-size: 18px"> Vehiculos :'
       for (var obj_i in this.state.romsData) {
         body = body + (`<h6  style=" color: white ; font-size: 18px ; margin-left: 16px;display: inline; width: 30% ;background-color: ${this.state.romsData[obj_i].RoomColor} " >   ${this.state.romsData[obj_i].text}   </h6>`) 
       }
