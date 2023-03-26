@@ -239,11 +239,13 @@ class App extends React.Component {
 
   get_validate_required_fields(letra){
     // onClick=escribe('0')
-    if ( (document.getElementById("cnaToken").value === ''  &&  document.getElementById("cnaToken").style.display !== 'none'  )   || document.getElementById("cnaRoom").value === ''  || document.getElementById('confirmSend').getElementsByClassName("e-list-item e-level-1 e-checklist")[0].ariaSelected === 'false' || document.getElementById("cnaEmployee").value === '' || document.getElementById("cnaApplicant").value === '') {
+    console.log('#################  get_validate_required_fields  @############################', document.getElementById('confirmSend').getElementsByClassName("e-list-item e-level-1 e-checklist")[0].ariaSelected)
+    if ( (document.getElementById("cnaToken").value === ''  &&  document.getElementById("cnaToken").style.display !== 'none'  )  || document.getElementById('confirmSend').getElementsByClassName("e-list-item e-level-1 e-checklist")[0].ariaSelected === 'false') {
       document.getElementsByClassName("e-control e-btn e-lib e-primary e-event-save e-flat")[0].setAttribute('style', 'display:None;')
     }
     else{
-      document.getElementsByClassName("e-control e-btn e-lib e-primary e-event-save e-flat")[0].setAttribute('style', '')
+      console.log('#################  get_validate_required_fields2222222222  @############################')
+      document.getElementsByClassName("e-control e-btn e-lib e-primary e-event-save e-flat")[0].setAttribute('style', 'display:flex;')
     }
   }
 
@@ -267,7 +269,8 @@ class App extends React.Component {
 
   get_confirmation(letra){
     // onClick=escribe('0')
-    if ( ((document.getElementById("cnaToken").value === ''  &&  document.getElementById("cnaToken").style.display !== 'none'  )   || document.getElementById("cnaRoom").value === '' || document.getElementById("cnaEmployee").value === '' || document.getElementById("cnaApplicant").value === '' || ( document.getElementById('cnaCancelState').getElementsByClassName("e-list-item e-level-1 e-checklist e-active")[0] != undefined &&  document.getElementById("cnaRason").value === '' )   )    ) {
+    // document.getElementById("cnaApplicant").value === '' || document.getElementById("cnaEmployee").value === '' || document.getElementById("cnaRoom").value === ''
+    if ( ((document.getElementById("cnaToken").value === ''  &&  document.getElementById("cnaToken").style.display !== 'none'  )  || ( document.getElementById('cnaCancelState').getElementsByClassName("e-list-item e-level-1 e-checklist e-active")[0] != undefined &&  document.getElementById("cnaRason").value === '' )   )    ) {
       DialogUtility.alert( {
         content:"Faltan campos obligatorios.",
         title : 'Información'
@@ -281,7 +284,7 @@ class App extends React.Component {
       //pass
     }
 
-    if ( (document.getElementById("cnaToken").value === ''  &&  document.getElementById("cnaToken").style.display !== 'none'  )   || document.getElementById("cnaRoom").value === ''  || document.getElementById('confirmSend').getElementsByClassName("e-list-item e-level-1 e-checklist")[0].ariaSelected === 'false' || document.getElementById("cnaEmployee").value === '' || document.getElementById("cnaApplicant").value === '') {
+    if ( (document.getElementById("cnaToken").value === ''  &&  document.getElementById("cnaToken").style.display !== 'none'  ) || document.getElementById('confirmSend').getElementsByClassName("e-list-item e-level-1 e-checklist")[0].ariaSelected === 'false') {
       document.getElementsByClassName("e-control e-btn e-lib e-primary e-event-save e-flat")[0].setAttribute('style', 'display:None;')
     }
     else{
@@ -616,7 +619,7 @@ class App extends React.Component {
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify(data_post_write)
       };
-      const response =  fetch (`${myJson['url']}/calendar/write_data`, requestOptions).then(res => res.json()).then(res => {
+      const response =  fetch (`${myJson['url']}/calendarFleet/write_data`, requestOptions).then(res => res.json()).then(res => {
         if (JSON.parse(res['result'])['error'] === true) {
           
           if (JSON.parse(res['result'])['type'] === 'token_undefined') {
@@ -1120,7 +1123,7 @@ class App extends React.Component {
           // value = {[1534, 1511]}
           // value = {[1534, 1511]}
           // change={this.onChange()}
-          const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}  onChange={(e) => this.onChange(e)} change={(e) => this.onChange(e)}   value={this.onChange(args.data)}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
+          const multiSelectComponentTest = <MultiSelectComponent id = "MultiSelectComponent" dataSource={optionListMany2Tags}  onChange={(e) => this.onChange(e)} change={(e) => this.onChange(e)}   value={this.onChange(args.data)}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
           this.state.multiSelectComponentTest = multiSelectComponentTest 
           ReactDOM.render(this.state.multiSelectComponentTest, document.getElementById('multiSelectContainer'));
           // insert para el campo m2m tags
@@ -1182,9 +1185,7 @@ class App extends React.Component {
         // document.getElementById('cnaToken').setAttribute('style', 'display:None;')
 
         // oculta elemento de cancelar evento
-        document.getElementById('cnaCancelState').setAttribute('style', 'display:None;')
-        document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
-
+  
       }
       else{
         var arrayParticipant = []
@@ -1196,23 +1197,28 @@ class App extends React.Component {
         ReactDOM.render(this.state.multiSelectComponentTest, document.getElementById('multiSelectContainer'));
         
         if (args.data.state ===  'request') {
+          this.requiredfields(true)
           document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;');
           document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;');
+        
         }
         else{
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:flex;');
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:flex;');
+          document.getElementById('cnaCancelState').setAttribute('style', 'display:None;')
+          document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
           
-          // campos readonly 
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('readonly', 'true;');
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('readonly', 'true;');
-          // $('#myFormID :input').setAttribute();
+          
+
+          console.log('estado del objeto =======================>', args.data.state )
+          if (args.data.state !== 'request') {
+            this.requiredfields(false)
+          }
+          
         }
         
       }
       document.getElementById('cnaToken').onchange = this.get_validate_required_fields  
-      document.getElementById('cnaRoom_hidden').onchange = this.get_validate_required_fields  
-      document.getElementById('cnaEmployee_hidden').onchange = this.get_validate_required_fields 
+      // document.getElementById('cnaRoom_hidden').onchange = this.get_validate_required_fields  
+      // document.getElementById('cnaEmployee_hidden').onchange = this.get_validate_required_fields 
       
       // document.getElementById('cnaRason').onclick = this.get_confirmation
       document.getElementById('confirmSend').onclick = this.get_confirmation
@@ -1248,6 +1254,49 @@ class App extends React.Component {
     }
   }
   
+
+  requiredfields(value){
+    if (value===false) {
+      document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:flex;');
+      document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:flex;');
+      document.getElementById('name').setAttribute('readonly', 'true');
+      document.getElementById('Description').setAttribute('readonly', 'true');
+    }else{
+      document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;');
+      document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;');
+      document.getElementById('name').removeAttribute('readonly');
+      document.getElementById('Description').removeAttribute('readonly');
+    }
+    
+
+  
+    var x = document.getElementById("cnaRoom").ej2_instances[0];
+    var y = document.getElementById("cnaLocation").ej2_instances[0]; 
+    var z = document.getElementById("StartTime").ej2_instances[0]; 
+    var a = document.getElementById("m2m_tags_participants").ej2_instances[0]; 
+    var b = document.getElementById("EndTime").ej2_instances[0];
+    var c = document.getElementById("cnaEmployee").ej2_instances[0];
+    
+    console.log('funcion para optimizar =-====================>', value, document.getElementById('Description').readonly)
+
+    x.enabled = value;
+    x.dataBind();
+
+    y.enabled = value;
+    y.dataBind();
+    
+    z.enabled = value;
+    z.dataBind();
+
+    a.enabled = value;
+    a.dataBind();
+
+    b.enabled = value;
+    b.dataBind();
+
+    c.enabled = value;
+    c.dataBind();
+  }
   
   onChange(e) { 
     console.log('data onchange ######111111111###################', e, array_participants)
@@ -1297,7 +1346,7 @@ class App extends React.Component {
               id: 'Id',
               // cnaRoom: { validation: { required: true } },
               cnaToken: { name: 'cnaToken', title: 'Token', validation: { required: true } },
-              subject: { name: 'name', title: 'Actividad' , validation: { required: true }},
+              subject: { name: 'name', title: 'Actividad', id : 'CnaactivityName' , validation: { required: true }},
               location: { name: 'cnalocation', title: 'Descripcion de la locación' },
               description: { name: 'Description', title: 'Descripcion del evento' },
               startTime: { name: 'StartTime', title: 'Desde' },
