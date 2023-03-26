@@ -239,12 +239,10 @@ class App extends React.Component {
 
   get_validate_required_fields(letra){
     // onClick=escribe('0')
-    console.log('#################  get_validate_required_fields  @############################', document.getElementById('confirmSend').getElementsByClassName("e-list-item e-level-1 e-checklist")[0].ariaSelected)
     if ( (document.getElementById("cnaToken").value === ''  &&  document.getElementById("cnaToken").style.display !== 'none'  )  || document.getElementById('confirmSend').getElementsByClassName("e-list-item e-level-1 e-checklist")[0].ariaSelected === 'false') {
       document.getElementsByClassName("e-control e-btn e-lib e-primary e-event-save e-flat")[0].setAttribute('style', 'display:None;')
     }
     else{
-      console.log('#################  get_validate_required_fields2222222222  @############################')
       document.getElementsByClassName("e-control e-btn e-lib e-primary e-event-save e-flat")[0].setAttribute('style', 'display:flex;')
     }
   }
@@ -352,7 +350,6 @@ class App extends React.Component {
 
       let body = '<div style ="text-align:center; font-size: 18px"> Vehiculos :'
 
-      console.log('data room =========================>', this.state.romsData)
       for (var obj_i in this.state.romsData) {
         body = body + (`<h6  style=" color: white ; font-size: 18px ; margin-left: 16px;display: inline; width: 30% ;background-color: ${this.state.romsData[obj_i].RoomColor} " >   ${this.state.romsData[obj_i].text}   </h6>`) 
       }
@@ -614,117 +611,118 @@ class App extends React.Component {
         data_cancel_state:data_cancel_state
       }
 
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify(data_post_write)
-      };
-      const response =  fetch (`${myJson['url']}/calendarFleet/write_data`, requestOptions).then(res => res.json()).then(res => {
-        if (JSON.parse(res['result'])['error'] === true) {
+      console.log('data write ==========22==========>',  arg.data)
+      // const requestOptions = {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json'},
+      //   body: JSON.stringify(data_post_write)
+      // };
+      // const response =  fetch (`${myJson['url']}/calendarFleet/write_data`, requestOptions).then(res => res.json()).then(res => {
+      //   if (JSON.parse(res['result'])['error'] === true) {
           
-          if (JSON.parse(res['result'])['type'] === 'token_undefined') {
-            DialogUtility.alert( {
-              content:"Para editar la actividad ingrese el código asociado.",
-              title : 'Información'
-            })
-          }
+      //     if (JSON.parse(res['result'])['type'] === 'token_undefined') {
+      //       DialogUtility.alert( {
+      //         content:"Para editar la actividad ingrese el código asociado.",
+      //         title : 'Información'
+      //       })
+      //     }
 
-          else if (JSON.parse(res['result'])['type'] === 'state_cancel') {
-            s.scheduleObj.activeEventData.event.Description = arg.data.Description
-            s.scheduleObj.deleteEvent(arg.data.Id);
-            DialogUtility.alert( {
-              content:"La actividad ha sido cancelada con exito!.",
-              title : 'Información'
-            })
-            return
-          }
+      //     else if (JSON.parse(res['result'])['type'] === 'state_cancel') {
+      //       s.scheduleObj.activeEventData.event.Description = arg.data.Description
+      //       s.scheduleObj.deleteEvent(arg.data.Id);
+      //       DialogUtility.alert( {
+      //         content:"La actividad ha sido cancelada con exito!.",
+      //         title : 'Información'
+      //       })
+      //       return
+      //     }
           
-          else if (JSON.parse(res['result'])['type'] === 'date_overlap') {
-            DialogUtility.alert( {
-              content:"Existe un traslape de horas con otro evento.",
-              title : 'Información'
-            })
-          }
+      //     else if (JSON.parse(res['result'])['type'] === 'date_overlap') {
+      //       DialogUtility.alert( {
+      //         content:"Existe un traslape de horas con otro evento.",
+      //         title : 'Información'
+      //       })
+      //     }
 
-          else if (JSON.parse(res['result'])['type'] === 'before_today') {
-            DialogUtility.alert( {
-              content:"No se puede editar o crear actividades anteriores a la fecha actual.",
-              title : 'Información'
-            })
-          }
+      //     else if (JSON.parse(res['result'])['type'] === 'before_today') {
+      //       DialogUtility.alert( {
+      //         content:"No se puede editar o crear actividades anteriores a la fecha actual.",
+      //         title : 'Información'
+      //       })
+      //     }
 
-          else if (JSON.parse(res['result'])['type'] === 'token_format') {
-            DialogUtility.alert( {
-              content:"El código debe de estar compuesto por 4 números comprendidos entre 0-9 eje: 0000, 0101, 9999.",
-              title : 'Información'
-            })
-          }
+      //     else if (JSON.parse(res['result'])['type'] === 'token_format') {
+      //       DialogUtility.alert( {
+      //         content:"El código debe de estar compuesto por 4 números comprendidos entre 0-9 eje: 0000, 0101, 9999.",
+      //         title : 'Información'
+      //       })
+      //     }
 
-          else if (JSON.parse(res['result'])['type'] === 'token_invalid') {
-            DialogUtility.alert( {
-              content:"La contraseña ingresada es incorrecta. Intente nuevamente y asegúrese de escribir la contraseña correcta.",
-              title : 'Información'
-            })
-          }
+      //     else if (JSON.parse(res['result'])['type'] === 'token_invalid') {
+      //       DialogUtility.alert( {
+      //         content:"La contraseña ingresada es incorrecta. Intente nuevamente y asegúrese de escribir la contraseña correcta.",
+      //         title : 'Información'
+      //       })
+      //     }
           
-          let Data = {
-            Id: s.scheduleObj.activeEventData.event.Id,
-            Subject: s.scheduleObj.activeEventData.event.Subject,
-            StartTime: s.scheduleObj.activeEventData.event.StartTime,
-            EndTime: s.scheduleObj.activeEventData.event.EndTime,
-            cnaRoom: s.scheduleObj.activeEventData.event.cnaRoom,
-            cnaQunatityParticipants: s.scheduleObj.activeEventData.event.cnaQunatityParticipants,
-            cnaApplicant: s.scheduleObj.activeEventData.event.cnaApplicant,
-            cnaEmployee: s.scheduleObj.activeEventData.event.cnaEmployee,
-            name: s.scheduleObj.activeEventData.event.name,
-            Description: s.scheduleObj.activeEventData.event.Description,
-            Locacion : s.scheduleObj.activeEventData.event.Locacion,
-          };
+      //     let Data = {
+      //       Id: s.scheduleObj.activeEventData.event.Id,
+      //       Subject: s.scheduleObj.activeEventData.event.Subject,
+      //       StartTime: s.scheduleObj.activeEventData.event.StartTime,
+      //       EndTime: s.scheduleObj.activeEventData.event.EndTime,
+      //       cnaRoom: s.scheduleObj.activeEventData.event.cnaRoom,
+      //       cnaQunatityParticipants: s.scheduleObj.activeEventData.event.cnaQunatityParticipants,
+      //       cnaApplicant: s.scheduleObj.activeEventData.event.cnaApplicant,
+      //       cnaEmployee: s.scheduleObj.activeEventData.event.cnaEmployee,
+      //       name: s.scheduleObj.activeEventData.event.name,
+      //       Description: s.scheduleObj.activeEventData.event.Description,
+      //       Locacion : s.scheduleObj.activeEventData.event.Locacion,
+      //     };
           
           
-          // resetear a nivel visual el check box a los valores previos 
-          for (var obj_i in s.state.scheduleData) {
-            for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
-              if (s.state.scheduleData[obj_i]['Id'] === s.scheduleObj.activeEventData.event.Id ) {
-                if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
-                  if ( s.state.scheduleData[obj_i]['cnaInventory'] &&  s.state.scheduleData[obj_i]['cnaInventory'].includes(  parseInt(document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id.replace('cnaInventory_', ''), 10)  ) ) {
-                    document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist e-active')
-                    document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', true)
-                    document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', true)
-                    document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons e-check')
-                    document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', true)
-                  }
-                  else{
-                    document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
-                    document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
-                    document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
-                    document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
-                    document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
-                  }
+      //     // resetear a nivel visual el check box a los valores previos 
+      //     for (var obj_i in s.state.scheduleData) {
+      //       for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
+      //         if (s.state.scheduleData[obj_i]['Id'] === s.scheduleObj.activeEventData.event.Id ) {
+      //           if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
+      //             if ( s.state.scheduleData[obj_i]['cnaInventory'] &&  s.state.scheduleData[obj_i]['cnaInventory'].includes(  parseInt(document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id.replace('cnaInventory_', ''), 10)  ) ) {
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist e-active')
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', true)
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', true)
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons e-check')
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', true)
+      //             }
+      //             else{
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
+      //               document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
+      //             }
   
-                }
+      //           }
 
 
-              }
+      //         }
               
-            }
-          }
+      //       }
+      //     }
 
-          s.scheduleObj.saveEvent(Data);
-        }
+      //     s.scheduleObj.saveEvent(Data);
+      //   }
 
-        else{
-          for (var obj_i in this.state.scheduleData) {
-            if (this.state.scheduleData[obj_i]['Id']  === arg.data.Id ) {
-              this.state.scheduleData[obj_i]['cnaInventory'] = data_check_box
-            }
-          }
-        }
+      //   else{
+      //     for (var obj_i in this.state.scheduleData) {
+      //       if (this.state.scheduleData[obj_i]['Id']  === arg.data.Id ) {
+      //         this.state.scheduleData[obj_i]['cnaInventory'] = data_check_box
+      //       }
+      //     }
+      //   }
         
-      }).catch(function(error) {
-        s.scheduleObj.activeEventData.cancel = true
-        return false
-      });
+      // }).catch(function(error) {
+      //   s.scheduleObj.activeEventData.cancel = true
+      //   return false
+      // });
     }
     // else{
     //   arg.data.cnaInventory = data_check_box
@@ -1206,9 +1204,6 @@ class App extends React.Component {
           document.getElementById('cnaCancelState').setAttribute('style', 'display:None;')
           document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
           
-          
-
-          console.log('estado del objeto =======================>', args.data.state )
           if (args.data.state !== 'request') {
             this.requiredfields(false)
           }
@@ -1277,7 +1272,6 @@ class App extends React.Component {
     var b = document.getElementById("EndTime").ej2_instances[0];
     var c = document.getElementById("cnaEmployee").ej2_instances[0];
     
-    console.log('funcion para optimizar =-====================>', value, document.getElementById('Description').readonly)
 
     x.enabled = value;
     x.dataBind();
@@ -1299,7 +1293,6 @@ class App extends React.Component {
   }
   
   onChange(e) { 
-    console.log('data onchange ######111111111###################', e, array_participants)
     
     if (e.cnaParticipants) {
       var array_participants = []
@@ -1307,8 +1300,6 @@ class App extends React.Component {
         array_participants.push(currentElement['value'])
       })  
 
-      console.log('data onchange ########222222222#################', e, array_participants)
-      
       // this.state.multiSelectComponentTest.props.value = array_participants
       return array_participants;
     }
