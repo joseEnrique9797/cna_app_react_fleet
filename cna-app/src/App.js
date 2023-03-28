@@ -298,6 +298,9 @@ class App extends React.Component {
     fetch (`${myJson['url']}/appointmentFleet/data`).then(res => res.json()).then(res => {
       var array = []
       // var count = 0
+      
+      console.log('data push =======================>', res )
+      
       if (res) {
         for (var property in res) {
           array.push({
@@ -313,8 +316,7 @@ class App extends React.Component {
 
             cnaVehicleName :  res[property]['cnaVehicleName'],
             cnaDriveName :  res[property]['cnaDriveName'],
-
-            cnalocation :  res[property]['cnalocation'],
+            cnaLocationFleet :  res[property]['cnaLocationFleet'],
             Description :  (res[property]['Description']),
             cnaInventory :  res[property]['check_box'],
             cnaRoom :  res[property]['cnaroom'],
@@ -344,6 +346,7 @@ class App extends React.Component {
       this.setState({
         participantData: res.data_participant,
         locationData: res.data_location,
+        applicantData: res.data_applicant,
         romsData: res.data_vehicle,
         employeeData: res.data_drivers,
       });
@@ -431,18 +434,19 @@ class App extends React.Component {
   //   });
   // }
 
-  getApplicantfetche = () => {  
-    fetch (`${myJson['url']}/applicant/data`).then(res => res.json()).then(res => {
-      this.setState({
-        applicantData: res,
-      });
-    }).catch(function(error) {
-      // DialogUtility.alert( {
-      //   content:"Ocurrio un error al traer los solicitantes disponibles. Contacte con el administrador.",
-      //   title : 'Información'
-      // })
-    });
-  }
+  // quitar
+  // getApplicantfetche = () => {  
+  //   fetch (`${myJson['url']}/applicant/data`).then(res => res.json()).then(res => {
+  //     this.setState({
+  //       applicantData: res,
+  //     });
+  //   }).catch(function(error) {
+  //     // DialogUtility.alert( {
+  //     //   content:"Ocurrio un error al traer los solicitantes disponibles. Contacte con el administrador.",
+  //     //   title : 'Información'
+  //     // })
+  //   });
+  // }
   
 
 
@@ -459,19 +463,20 @@ class App extends React.Component {
     });
   }
 
-  // peticion get al backend para el equipo que se puede utilizar
-  getInventoryfetche = () => {  
-    fetch (`${myJson['url']}/inventory/data`).then(res => res.json()).then(res => {
-      this.setState({
-        inventoryData: res,
-      });
-    }).catch(function(error) {
-      // DialogUtility.alert( {
-      //   content:"Ocurrio un error al traer los requerimientos. Contacte con el administrador.",
-      //   title : 'Información'
-      // })
-    });
-  }
+  // quitar
+  // // peticion get al backend para el equipo que se puede utilizar
+  // getInventoryfetche = () => {  
+  //   fetch (`${myJson['url']}/inventory/data`).then(res => res.json()).then(res => {
+  //     this.setState({
+  //       inventoryData: res,
+  //     });
+  //   }).catch(function(error) {
+  //     // DialogUtility.alert( {
+  //     //   content:"Ocurrio un error al traer los requerimientos. Contacte con el administrador.",
+  //     //   title : 'Información'
+  //     // })
+  //   });
+  // }
 
   // get_dialog(){
   //   return DialogUtility.alert({
@@ -523,10 +528,9 @@ class App extends React.Component {
       if (arg.data[0].cnaQunatityParticipants === undefined) {
         arg.data[0].cnaQunatityParticipants = 1
       }
-      
+      console.log('esta es la data post =============>', arg.data[0] )
       let data_post = {
         data:arg.data[0],
-        data_check_box:data_check_box
       }
       
       const requestOptions = {
@@ -534,7 +538,7 @@ class App extends React.Component {
         headers: { 'Content-Type': 'application/json' , 'accept':'application/json' },
         body: JSON.stringify(data_post)
       };
-      const response =  fetch (`${myJson['url']}/calendar/set_data`, requestOptions).then(res => res.json()).then(res => {
+      const response =  fetch (`${myJson['url']}/calendarFleet/set_data`, requestOptions).then(res => res.json()).then(res => {
         if (JSON.parse(res['result'])['error'] === true) {
           if (JSON.parse(res['result'])['type'] === 'before_today') {
             DialogUtility.alert( {
@@ -610,119 +614,23 @@ class App extends React.Component {
         data_check_box:data_check_box,
         data_cancel_state:data_cancel_state
       }
+      
 
-      console.log('data write ==========22==========>',  arg.data)
-      // const requestOptions = {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json'},
-      //   body: JSON.stringify(data_post_write)
-      // };
-      // const response =  fetch (`${myJson['url']}/calendarFleet/write_data`, requestOptions).then(res => res.json()).then(res => {
-      //   if (JSON.parse(res['result'])['error'] === true) {
-          
-      //     if (JSON.parse(res['result'])['type'] === 'token_undefined') {
-      //       DialogUtility.alert( {
-      //         content:"Para editar la actividad ingrese el código asociado.",
-      //         title : 'Información'
-      //       })
-      //     }
+      var e = document.querySelector('.e-multi-hidden');
+      var value = e.options[0].value;
+      var text = e.options[0].text;
 
-      //     else if (JSON.parse(res['result'])['type'] === 'state_cancel') {
-      //       s.scheduleObj.activeEventData.event.Description = arg.data.Description
-      //       s.scheduleObj.deleteEvent(arg.data.Id);
-      //       DialogUtility.alert( {
-      //         content:"La actividad ha sido cancelada con exito!.",
-      //         title : 'Información'
-      //       })
-      //       return
-      //     }
-          
-      //     else if (JSON.parse(res['result'])['type'] === 'date_overlap') {
-      //       DialogUtility.alert( {
-      //         content:"Existe un traslape de horas con otro evento.",
-      //         title : 'Información'
-      //       })
-      //     }
+      var value1 = e.options[1].value;
+      var text1 = e.options[0].text;
 
-      //     else if (JSON.parse(res['result'])['type'] === 'before_today') {
-      //       DialogUtility.alert( {
-      //         content:"No se puede editar o crear actividades anteriores a la fecha actual.",
-      //         title : 'Información'
-      //       })
-      //     }
+      var value2 = e.options[2].value;
+      var text2 = e.options[0].text;
+      
+      console.log('data write ==========66==========>', value,  value1, value2)
 
-      //     else if (JSON.parse(res['result'])['type'] === 'token_format') {
-      //       DialogUtility.alert( {
-      //         content:"El código debe de estar compuesto por 4 números comprendidos entre 0-9 eje: 0000, 0101, 9999.",
-      //         title : 'Información'
-      //       })
-      //     }
-
-      //     else if (JSON.parse(res['result'])['type'] === 'token_invalid') {
-      //       DialogUtility.alert( {
-      //         content:"La contraseña ingresada es incorrecta. Intente nuevamente y asegúrese de escribir la contraseña correcta.",
-      //         title : 'Información'
-      //       })
-      //     }
-          
-      //     let Data = {
-      //       Id: s.scheduleObj.activeEventData.event.Id,
-      //       Subject: s.scheduleObj.activeEventData.event.Subject,
-      //       StartTime: s.scheduleObj.activeEventData.event.StartTime,
-      //       EndTime: s.scheduleObj.activeEventData.event.EndTime,
-      //       cnaRoom: s.scheduleObj.activeEventData.event.cnaRoom,
-      //       cnaQunatityParticipants: s.scheduleObj.activeEventData.event.cnaQunatityParticipants,
-      //       cnaApplicant: s.scheduleObj.activeEventData.event.cnaApplicant,
-      //       cnaEmployee: s.scheduleObj.activeEventData.event.cnaEmployee,
-      //       name: s.scheduleObj.activeEventData.event.name,
-      //       Description: s.scheduleObj.activeEventData.event.Description,
-      //       Locacion : s.scheduleObj.activeEventData.event.Locacion,
-      //     };
-          
-          
-      //     // resetear a nivel visual el check box a los valores previos 
-      //     for (var obj_i in s.state.scheduleData) {
-      //       for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
-      //         if (s.state.scheduleData[obj_i]['Id'] === s.scheduleObj.activeEventData.event.Id ) {
-      //           if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
-      //             if ( s.state.scheduleData[obj_i]['cnaInventory'] &&  s.state.scheduleData[obj_i]['cnaInventory'].includes(  parseInt(document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id.replace('cnaInventory_', ''), 10)  ) ) {
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist e-active')
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', true)
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', true)
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons e-check')
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', true)
-      //             }
-      //             else{
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
-      //               document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
-      //             }
-  
-      //           }
-
-
-      //         }
-              
-      //       }
-      //     }
-
-      //     s.scheduleObj.saveEvent(Data);
-      //   }
-
-      //   else{
-      //     for (var obj_i in this.state.scheduleData) {
-      //       if (this.state.scheduleData[obj_i]['Id']  === arg.data.Id ) {
-      //         this.state.scheduleData[obj_i]['cnaInventory'] = data_check_box
-      //       }
-      //     }
-      //   }
-        
-      // }).catch(function(error) {
-      //   s.scheduleObj.activeEventData.cancel = true
-      //   return false
-      // });
+      arg.data.cnaParticipants = [value,  value1, value2]
+      
+      console.log('data write ==========66==========>', arg.data.cnaParticipants)
     }
     // else{
     //   arg.data.cnaInventory = data_check_box
@@ -843,9 +751,9 @@ class App extends React.Component {
     // this.getLocationfetche();
     // quitar 
     // this.getParticipantsfetche();
-    this.getApplicantfetche()
+    // this.getApplicantfetche()
     // this.getEmployeefetcheasync();
-    this.getInventoryfetche();
+    // this.getInventoryfetche();
     // const optionListMany2Tags =[{ Game: "Game 1", Id: 1 }, { Game: "Game 2", Id: 2 }];
     // let multiSelectComponent = new MultiSelectComponent({
     //   dataSource: optionListMany2Tags,
@@ -854,7 +762,6 @@ class App extends React.Component {
     //   change: this.props.onChange // Asignamos la función onChange a la propiedad change
     // });
     // multiSelectComponent.appendTo(this.multiSelectRef.current);
-    
   };
 
   onPopupOpen(args) {
@@ -960,6 +867,7 @@ class App extends React.Component {
           container.appendChild(inputEle);
 
           
+
           let drowDownList = new DropDownList({
             // rellenar la data
             dataSource: array,
@@ -1099,14 +1007,22 @@ class App extends React.Component {
 
           container_before.appendChild(inputLocation);
 
-          let drowDownLocation = new DropDownList({
-            // rellenar la data
-            dataSource: arraylocation,
-            fields: { text: 'text', value: 'value' , validation: { required: true }},
-            value: args.data.cnalocation,
-            // nombre del campo padre, definido en la lista
-            floatLabelType: 'Always', placeholder: 'Lugar de visita'
+          // let drowDownLocation = new TextBox ({
+          //   // rellenar la data
+          //   dataSource: arraylocation,
+          //   fields: { text: 'text', value: 'value' , validation: { required: true }},
+          //   value: args.data.cnalocation,
+          //   // nombre del campo padre, definido en la lista
+          //   floatLabelType: 'Always', placeholder: 'Lugar de visita'
+          // });
+
+          let drowDownLocation = new TextBox ({
+            placeholder: 'Lugar de visita',
+            value: args.data.cnaLocationFleet,
           });
+
+          
+          
 
 
           drowDownLocation.appendTo(inputLocation);
@@ -1121,7 +1037,7 @@ class App extends React.Component {
           // value = {[1534, 1511]}
           // value = {[1534, 1511]}
           // change={this.onChange()}
-          const multiSelectComponentTest = <MultiSelectComponent id = "MultiSelectComponent" dataSource={optionListMany2Tags}  onChange={(e) => this.onChange(e)} change={(e) => this.onChange(e)}   value={this.onChange(args.data)}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
+          const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}  value={args.data.cnaParticipants}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
           this.state.multiSelectComponentTest = multiSelectComponentTest 
           ReactDOM.render(this.state.multiSelectComponentTest, document.getElementById('multiSelectContainer'));
           // insert para el campo m2m tags
@@ -1135,50 +1051,60 @@ class App extends React.Component {
         // document.getElementById('cnaToken').setAttribute('aria-required', 'true')
       }
       
-      for (var obj_i in this.state.scheduleData) {
-        if (this.state.scheduleData[obj_i]['Id']  === args.data.Id) {
-          for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
+      // quitar
+      // for (var obj_i in this.state.scheduleData) {
+      //   if (this.state.scheduleData[obj_i]['Id']  === args.data.Id) {
+      //     for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
             
-            if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
-              if ( this.state.scheduleData[obj_i]['cnaInventory'] &&  this.state.scheduleData[obj_i]['cnaInventory'].includes(  parseInt(document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id.replace('cnaInventory_', ''), 10)  ) ) {
-                document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist e-active')
-                document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', true)
-                document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', true)
-                document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons e-check')
-                document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', true)
-              }
-              else{
-                document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
-                document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
-                document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
-                document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
-                document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
-              }
+      //       if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
+      //         if ( this.state.scheduleData[obj_i]['cnaInventory'] &&  this.state.scheduleData[obj_i]['cnaInventory'].includes(  parseInt(document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id.replace('cnaInventory_', ''), 10)  ) ) {
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist e-active')
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', true)
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', true)
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons e-check')
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', true)
+      //         }
+      //         else{
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
+      //           document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
+      //         }
 
-            }
-          }
-        }
-      }
+      //       }
+      //     }
+      //   }
+      // }
 
       
 
       //ventana de eventos nueva 
       // resetea los check box
       if ( args.data.Id === undefined ) {
-        document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;')
         document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;')
+        document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[3].setAttribute('style', 'display:None;')
+        
+        this.requiredfields(true)
+        // quitar
         // document.getElementById('cnaRoom').setAttribute('style', 'display:None;')
         // resetea los elementos seleccionados en el checBox
-        for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
-          if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
-            document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
-            document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
-            document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
-            document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
-            document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
-          }
-        }
+        // for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
+        //   if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
+        //     document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
+        //     document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
+        //     document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
+        //     document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
+        //     document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
+        //   }
+        // }
         
+        arrayParticipant = this.state.participantData
+        const optionListMany2Tags = arrayParticipant 
+
+        const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}     value={args.data.cnaParticipants}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
+        this.state.multiSelectComponentTest = multiSelectComponentTest 
+        ReactDOM.render(this.state.multiSelectComponentTest, document.getElementById('multiSelectContainer'));
         // oculta elemento de token
         // document.getElementById('cnaToken').setAttribute('style', 'display:None;')
 
@@ -1190,14 +1116,15 @@ class App extends React.Component {
         arrayParticipant = this.state.participantData
         const optionListMany2Tags = arrayParticipant 
         // onChange={(e) => this.onChange(e)} change={(e) => this.onChange(e)}
-        const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}     value={this.onChange(args.data)}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
+        console.log('ya existe ########################', args.data.cnaParticipants )
+        const multiSelectComponentTest = <MultiSelectComponent  dataSource={optionListMany2Tags}     value={args.data.cnaParticipants}  fields={{ text: 'text', value: 'value' }} placeholder='Participantes' id = 'm2m_tags_participants' />;
         this.state.multiSelectComponentTest = multiSelectComponentTest 
         ReactDOM.render(this.state.multiSelectComponentTest, document.getElementById('multiSelectContainer'));
         
         if (args.data.state ===  'request') {
           this.requiredfields(true)
-          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;');
           document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;');
+          document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[3].setAttribute('style', 'display:None;');
         
         }
         else{
@@ -1205,7 +1132,7 @@ class App extends React.Component {
           document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
           
           if (args.data.state !== 'request') {
-            this.requiredfields(false)
+            this.requiredfields(true)
           }
           
         }
@@ -1252,13 +1179,13 @@ class App extends React.Component {
 
   requiredfields(value){
     if (value===false) {
-      document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:flex;');
       document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:flex;');
+      document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[3].setAttribute('style', 'display:flex;');
       document.getElementById('name').setAttribute('readonly', 'true');
       document.getElementById('Description').setAttribute('readonly', 'true');
     }else{
-      document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[5].setAttribute('style', 'display:None;');
       document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[4].setAttribute('style', 'display:None;');
+      document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[3].setAttribute('style', 'display:None;');
       document.getElementById('name').removeAttribute('readonly');
       document.getElementById('Description').removeAttribute('readonly');
     }
@@ -1271,6 +1198,7 @@ class App extends React.Component {
     var a = document.getElementById("m2m_tags_participants").ej2_instances[0]; 
     var b = document.getElementById("EndTime").ej2_instances[0];
     var c = document.getElementById("cnaEmployee").ej2_instances[0];
+    var d = document.getElementById("cnaApplicant").ej2_instances[0];
     
 
     x.enabled = value;
@@ -1290,17 +1218,18 @@ class App extends React.Component {
 
     c.enabled = value;
     c.dataBind();
+    
+    d.enabled = value;
+    d.dataBind();
   }
   
   onChange(e) { 
     
-    if (e.cnaParticipants) {
+    if (e && e.cnaParticipants) {
       var array_participants = []
       e.cnaParticipants.forEach((currentElement) => { 
         array_participants.push(currentElement['value'])
       })  
-
-      // this.state.multiSelectComponentTest.props.value = array_participants
       return array_participants;
     }
     
