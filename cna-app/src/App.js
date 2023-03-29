@@ -75,23 +75,23 @@ L10n.load({
       cancel: "Cancelar",
       noTitle: "(Sin título)",
       delete: "Eliminar",
-      deleteEvent: "Este evento",
+      deleteEvent: "Esta actividad",
       deleteMultipleEvent: "Eliminar múltiples eventos",
       selectedItems: "Artículos seleccionados",
       deleteSeries: "Serie completa",
       edit: "Editar",
       editSeries: "Serie completa",
-      editEvent: "Este evento",
+      editEvent: "Esta actividad",
       createEvent: "Crear",
       subject: "Tema",
       addTitle: "Añadir título",
       moreDetails: "Más detalles",
       save: "Salvar",
       editContent: "¿Cómo le gustaría cambiar la cita en la serie?",
-      deleteContent: "¿Seguro que quieres eliminar este evento?",
+      deleteContent: "¿Seguro que quieres eliminar esta actividad?",
       deleteMultipleContent:
         "¿Estás seguro de que deseas eliminar los eventos seleccionados?",
-      newEvent: "Nuevo evento",
+      newEvent: "Nueva actividad",
       title: "Título",
       location: "Ubicación",
       description: "Descripción",
@@ -609,29 +609,141 @@ class App extends React.Component {
         document.getElementById('cnaCancelState').getElementsByClassName("e-list-item e-level-1 e-checklist")[0].setAttribute('aria-selected', false)
       }
 
+      
+      
+
+      
+      var e = document.querySelector('.e-multi-hidden');
+
+      var option_array = []
+      
+      for (let index = 0; index < e.options.length; index++) {
+        option_array.push(e.options[index].value)
+        
+      }
+      
+
+      console.log('data write ==========66666666==========>',  option_array )
+      
+      // e.options.forEach((optionElement) => { 
+      //   // 
+      //   console.log('numero de opciones =====11111#####')
+      // })  
+
+      
+      // var value = e.options[0].value;
+      // var text = e.options[0].text;
+
+      // var value1 = e.options[1].value;
+      // var text1 = e.options[0].text;
+
+      // var value2 = e.options[2].value;
+      // var text2 = e.options[0].text;
+      
+      
+
+      arg.data.cnaParticipants = option_array
+      
+      console.log('data write ==========777777777==========>', arg.data.cnaParticipants)
+
       let data_post_write = {
         data:arg.data,
         data_check_box:data_check_box,
         data_cancel_state:data_cancel_state
       }
-      
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(data_post_write)
+      };
+      const response =  fetch (`${myJson['url']}/calendarFleet/write_data`, requestOptions).then(res => res.json()).then(res => {
+        if (JSON.parse(res['result'])['error'] === true) {
+          if (JSON.parse(res['result'])['type'] === 'token_undefined') {
+            DialogUtility.alert( {
+              content:"Para editar la actividad ingrese el código asociado.",
+              title : 'Información'
+            })
+          }
 
-      var e = document.querySelector('.e-multi-hidden');
-      var value = e.options[0].value;
-      var text = e.options[0].text;
+          else if (JSON.parse(res['result'])['type'] === 'state_cancel') {
+            s.scheduleObj.activeEventData.event.Description = arg.data.Description
+            s.scheduleObj.deleteEvent(arg.data.Id);
+            DialogUtility.alert( {
+              content:"La actividad ha sido cancelada con exito!.",
+              title : 'Información'
+            })
+            return
+          }
+          
+          else if (JSON.parse(res['result'])['type'] === 'date_overlap') {
+            DialogUtility.alert( {
+              content:"Existe un traslape de horas con otro evento.",
+              title : 'Información'
+            })
+          }
 
-      var value1 = e.options[1].value;
-      var text1 = e.options[0].text;
+          else if (JSON.parse(res['result'])['type'] === 'before_today') {
+            DialogUtility.alert( {
+              content:"No se puede editar o crear actividades anteriores a la fecha actual.",
+              title : 'Información'
+            })
+          }
 
-      var value2 = e.options[2].value;
-      var text2 = e.options[0].text;
-      
-      console.log('data write ==========66==========>', value,  value1, value2)
+          else if (JSON.parse(res['result'])['type'] === 'token_format') {
+            DialogUtility.alert( {
+              content:"El código debe de estar compuesto por 4 números comprendidos entre 0-9 eje: 0000, 0101, 9999.",
+              title : 'Información'
+            })
+          }
 
-      arg.data.cnaParticipants = [value,  value1, value2]
-      
-      console.log('data write ==========66==========>', arg.data.cnaParticipants)
+          else if (JSON.parse(res['result'])['type'] === 'token_invalid') {
+            DialogUtility.alert( {
+              content:"La contraseña ingresada es incorrecta. Intente nuevamente y asegúrese de escribir la contraseña correcta.",
+              title : 'Información'
+            })
+          }
+          
+          let Data = {
+            Id: s.scheduleObj.activeEventData.event.Id,
+            Subject: s.scheduleObj.activeEventData.event.Subject,
+            StartTime: s.scheduleObj.activeEventData.event.StartTime,
+            EndTime: s.scheduleObj.activeEventData.event.EndTime,
+            cnaRoom: s.scheduleObj.activeEventData.event.cnaRoom,
+            cnaQunatityParticipants: s.scheduleObj.activeEventData.event.cnaQunatityParticipants,
+            cnaApplicant: s.scheduleObj.activeEventData.event.cnaApplicant,
+            cnaEmployee: s.scheduleObj.activeEventData.event.cnaEmployee,
+            name: s.scheduleObj.activeEventData.event.name,
+            Description: s.scheduleObj.activeEventData.event.Description,
+            Locacion : s.scheduleObj.activeEventData.event.Locacion,
+          };
+          
+          
+          
+
+          s.scheduleObj.saveEvent(Data);
+        }
+
+
+      }).catch(function(error) {
+        s.scheduleObj.activeEventData.cancel = true
+        return false
+      });
+
+
+
+
+
+
+
+
+        
+
     }
+
+    // }).catch(function(error) {
+      //   s.scheduleObj.activeEventData.cancel = true
+      //   return false
+      // });
     // else{
     //   arg.data.cnaInventory = data_check_box
     // }
@@ -905,7 +1017,7 @@ class App extends React.Component {
           ];
 
           let c = [
-            { text: 'Cancelar este evento .', id:1 },
+            { text: 'Cancelar esta actividad .', id:1 },
           ];
           
 
@@ -1268,7 +1380,7 @@ class App extends React.Component {
               cnaToken: { name: 'cnaToken', title: 'Token', validation: { required: true } },
               subject: { name: 'name', title: 'Actividad', id : 'CnaactivityName' , validation: { required: true }},
               location: { name: 'cnalocation', title: 'Descripcion de la locación' },
-              description: { name: 'Description', title: 'Descripcion del evento' },
+              description: { name: 'Description', title: 'Descripción de la actividad' },
               startTime: { name: 'StartTime', title: 'Desde' },
               endTime: { name: 'EndTime', title: 'Hasta' },
               IsAllDay: { default: false}
