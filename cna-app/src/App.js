@@ -528,11 +528,22 @@ class App extends React.Component {
       if (arg.data[0].cnaQunatityParticipants === undefined) {
         arg.data[0].cnaQunatityParticipants = 1
       }
-      console.log('esta es la data post =============>', arg.data[0] )
+      
+      var e = document.querySelector('.e-multi-hidden');
+      var option_array = []
+      for (let index = 0; index < e.options.length; index++) {
+        option_array.push(e.options[index].value)
+        
+      }
+      
+      arg.data[0].cnaParticipants = option_array
+      
+      
       let data_post = {
         data:arg.data[0],
       }
       
+      console.log('create data =================>', arg.data[0] )
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' , 'accept':'application/json' },
@@ -575,11 +586,12 @@ class App extends React.Component {
           })
         }
 
-        for (var obj_i in s.state.scheduleData) {
-          if (s.state.scheduleData[obj_i]['Id']  === arg.data[0].Id ) {
-            s.state.scheduleData[obj_i]['cnaInventory'] = data_check_box
-          }
-        }
+        // quitar
+        // for (var obj_i in s.state.scheduleData) {
+        //   if (s.state.scheduleData[obj_i]['Id']  === arg.data[0].Id ) {
+        //     s.state.scheduleData[obj_i]['cnaInventory'] = data_check_box
+        //   }
+        // }
         
         if (JSON.parse(res['result'])['type'] === 'recharged') {
           setTimeout(function(){
@@ -1244,7 +1256,7 @@ class App extends React.Component {
           document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
           
           if (args.data.state !== 'request') {
-            this.requiredfields(true)
+            this.requiredfields(false)
           }
           
         }
