@@ -214,6 +214,7 @@ class App extends React.Component {
       state: '',
       romsData: [],
       employeeData: [],
+      stateColorData: [],
       locationData: [],
       participantData: [],
       applicantData: [],
@@ -349,6 +350,7 @@ class App extends React.Component {
         applicantData: res.data_applicant,
         romsData: res.data_vehicle,
         employeeData: res.data_drivers,
+        stateColorData: res.data_state_color,
       });
 
       let body = '<div style ="text-align:center; font-size: 18px"> Vehiculos :'
@@ -528,22 +530,11 @@ class App extends React.Component {
       if (arg.data[0].cnaQunatityParticipants === undefined) {
         arg.data[0].cnaQunatityParticipants = 1
       }
-      
-      var e = document.querySelector('.e-multi-hidden');
-      var option_array = []
-      for (let index = 0; index < e.options.length; index++) {
-        option_array.push(e.options[index].value)
-        
-      }
-      
-      arg.data[0].cnaParticipants = option_array
-      
-      
+      console.log('esta es la data post =============>', arg.data[0] )
       let data_post = {
         data:arg.data[0],
       }
       
-      console.log('create data =================>', arg.data[0] )
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' , 'accept':'application/json' },
@@ -586,12 +577,11 @@ class App extends React.Component {
           })
         }
 
-        // quitar
-        // for (var obj_i in s.state.scheduleData) {
-        //   if (s.state.scheduleData[obj_i]['Id']  === arg.data[0].Id ) {
-        //     s.state.scheduleData[obj_i]['cnaInventory'] = data_check_box
-        //   }
-        // }
+        for (var obj_i in s.state.scheduleData) {
+          if (s.state.scheduleData[obj_i]['Id']  === arg.data[0].Id ) {
+            s.state.scheduleData[obj_i]['cnaInventory'] = data_check_box
+          }
+        }
         
         if (JSON.parse(res['result'])['type'] === 'recharged') {
           setTimeout(function(){
@@ -827,15 +817,26 @@ class App extends React.Component {
     var style_state = ''
     var state_translation = ''
     // args.data.state
+
+
+    console.log ('arreglo de colres ========>', this.state.stateColorData )
+    
+    
     if (args.data.state === 'request') {
       state_translation = 'SOLICITUD'
-      style_state = "text-align:center;background-color:yellow"
     }
 
     if (args.data.state === 'assign') {
       state_translation = 'ASIGNADO'
-      style_state = "text-align:center;background-color:green"
     }
+
+    
+    this.state.stateColorData.forEach((currentState) => { 
+      if (currentState.text === args.data.state) {
+        style_state = "text-align:center;background-color:" + currentState.color_rgb_background + ";color:" + currentState.color_rgb_font
+      }
+    })  
+
 
 
     console.log('data state =============$$$$$$$$$$$$$=============>', args.data  )
@@ -1256,7 +1257,7 @@ class App extends React.Component {
           document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
           
           if (args.data.state !== 'request') {
-            this.requiredfields(false)
+            this.requiredfields(true)
           }
           
         }
