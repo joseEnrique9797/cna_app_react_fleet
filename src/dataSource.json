@@ -1,0 +1,76 @@
+{
+    "empList": [
+      {
+        "Id": "100",
+        "Name": "Sanwar",
+        "Age": "25",
+        "Address": "Jaipur",
+        "City": "Jaipur",
+        "Salary": "500000",
+        "Department": "IT"
+      },
+      {
+        "Id": "2",
+        "Name": "Nisha",
+        "Age": "25",
+        "Address": "C-Scheme",
+        "City": "Jaipur",
+        "Salary": "500000",
+        "Department": "IT"
+      },
+      {
+        "Id": "3",
+        "Name": "David",
+        "Age": "25",
+        "Address": "C-Scheme",
+        "City": "Jaipur",
+        "Salary": "500000",
+        "Department": "IT"
+      },
+      {
+        "Id": "4",
+        "Name": "Sam",
+        "Age": "25",
+        "Address": "C-Scheme",
+        "City": "Jaipur",
+        "Salary": "500000",
+        "Department": "IT"
+      },
+      {
+        "Id": "5",
+        "Name": "Jyotsna",
+        "Age": "25",
+        "Address": "C-Scheme",
+        "City": "Mumbai",
+        "Salary": "500000",
+        "Department": "IT"
+      },
+      {
+        "Id": "6",
+        "Name": "Sid",
+        "Age": "25",
+        "Address": "C-Scheme",
+        "City": "Bangalore",
+        "Salary": "500000",
+        "Department": "IT"
+      },
+      {
+        "Id": "7",
+        "Name": "Chavi",
+        "Age": "25",
+        "Address": "C-Scheme",
+        "City": "Noida",
+        "Salary": "500000",
+        "Department": "IT"
+      },
+      {
+        "Id": "8",
+        "Name": "Nisha",
+        "Age": "25",
+        "Address": "C-Scheme",
+        "City": "Delhi",
+        "Salary": "500000",
+        "Department": "IT"
+      }
+    ]
+  }
