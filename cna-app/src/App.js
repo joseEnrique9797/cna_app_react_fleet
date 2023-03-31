@@ -307,6 +307,7 @@ class App extends React.Component {
           array.push({
             Id: res[property]['external_id'],
             CategoryColor:  res[property]['CategoryColor'],
+            colorFont:  res[property]['colorFont'],
             state:  res[property]['state'],
             RecurrenceRule: res[property]['RecurrenceRule'],
             name:  res[property]['Subject'],
@@ -316,6 +317,7 @@ class App extends React.Component {
             cnaParticipants :  res[property]['participant_ids'],
 
             cnaVehicleName :  res[property]['cnaVehicleName'],
+            cnaProgramaticName :  res[property]['cnaProgramaticName'],
             cnaDriveName :  res[property]['cnaDriveName'],
             cnaLocationFleet :  res[property]['cnaLocationFleet'],
             Description :  (res[property]['Description']),
@@ -819,7 +821,7 @@ class App extends React.Component {
     // args.data.state
 
 
-    console.log ('arreglo de colres ========>', this.state.stateColorData )
+    console.log ('arreglo de colres ========>', this.state['romsData'] , args )
     
     
     if (args.data.state === 'request') {
@@ -837,14 +839,9 @@ class App extends React.Component {
       }
     })  
 
+    console.log('state header ======#$$$#########>', style_state )
 
-
-    console.log('data state =============$$$$$$$$$$$$$=============>', args.data  )
-    
-    
-    
-    args.element.innerHTML =  "<div class=\"e-appointment-details\"> <h6 style = "+ style_state + " >"+  state_translation +"</h6> <div class=\"e-subject\">" + name_employee + "</div> <div class=\"e-subject\">" + args.data.cnaDriveName + "</div><div class=\"e-time\">" + args.data.cnaVehicleName  + "</div></div>"
-    
+    var style_font_general = "color:white"
     if (args.data.CategoryColor === undefined ) {
       for ( var index in  this.state.romsData) {
         if (args.data.cnaRoom === this.state.romsData[index].value) {
@@ -852,6 +849,30 @@ class App extends React.Component {
         }
       }
     }
+
+
+    if (args.data.colorFont) {
+      style_font_general = "color:"+args.data.colorFont
+    }
+    
+
+    console.log('data state =============$$$$$$$$$$$$$=============>', style_font_general  )
+    
+
+    var cnaDriveName = ''
+    var cnaVehicleName = ''
+    if (args.data.cnaDriveName) {
+      cnaDriveName = args.data.cnaDriveName
+    }
+
+    if (args.data.cnaVehicleName) {
+      cnaVehicleName = args.data.cnaVehicleName
+    }
+    
+    
+    args.element.innerHTML =  "<div class=\"e-appointment-details\"> <h6 style = "+ style_state + " >"+  state_translation +"</h6> <div class=\"e-subject\"  style = " + style_font_general + ">" + name_employee + "</div> <div style = "+ style_font_general +" class=\"e-subject\">" + cnaDriveName + "</div><div  style = "+ style_font_general + " class=\"e-time\">" + cnaVehicleName  + "</div>" + "<div  style = "+ style_font_general + " class=\"e-time\">" + cnaVehicleName  + "</div>"   +"</div>"
+    
+    
     args.element.style.backgroundColor = args.data.CategoryColor;
     
 
@@ -999,7 +1020,7 @@ class App extends React.Component {
             fields: { text: 'text', value: 'value'},
             value: args.data.cnaRoom,
             // nombre del campo padre, definido en la lista
-            floatLabelType: 'Always', placeholder: 'Vehiculo'
+            floatLabelType: 'Always', placeholder: 'Vehículo'
           });
 
           
@@ -1257,7 +1278,7 @@ class App extends React.Component {
           document.getElementById('cnaRason').setAttribute('style', 'display:None;') 
           
           if (args.data.state !== 'request') {
-            this.requiredfields(true)
+            this.requiredfields(false)
           }
           
         }
@@ -1375,7 +1396,7 @@ class App extends React.Component {
               <Col xs={3}><img src={logo} alt="logo" style={{ width: 214}} /></Col>
               
               {window.screen.width >= 900 ?   
-                <Col xs={7} style={{ textAlign: "center"}}><text style={{ fontWeight: 600}} >CONSEJO NACIONAL ANTICORRUPCIÓN</text> <br></br>    <text>ADMINISTRACIÓN Y RECURSOS HUMANOS</text> <br></br>  <text>Reserva de vehiculos</text>  <br></br> <div id= "list_room_color">  </div> <br></br> </Col>          :       <text></text> 
+                <Col xs={7} style={{ textAlign: "center"}}><text style={{ fontWeight: 600}} >CONSEJO NACIONAL ANTICORRUPCIÓN</text> <br></br>    <text>ADMINISTRACIÓN Y RECURSOS HUMANOS</text> <br></br>  <text>Reserva de vehículos</text>  <br></br> <div id= "list_room_color">  </div> <br></br> </Col>          :       <text></text> 
               }
 
 
