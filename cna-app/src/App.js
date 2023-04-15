@@ -371,87 +371,7 @@ class App extends React.Component {
     });
   }
   
-  
-  // peticion get al backend para salas
-  // almacena todas las salas disponibles en el sistema para luego dejarlas disponible al agregar un evento desde el frontend
-  // quitar
-  // getRoomfetche = () => {  
-  //   fetch (`${myJson['url']}/fleet/drivers/data`).then(res => res.json()).then(res => {
-  //     this.setState({
-        
-  //     });
 
-      
-    
-  //   }).catch(function(error) {
-  //     DialogUtility.alert( {
-  //       content:"Ocurrio un error al traer las salas disponibles. Contacte con el administrador.",
-  //       title : 'Información'
-  //     })
-  //   });
-  // }
-
-
-  // peticion get al backend para empleados
-  // almacena todos los empleados disponibles en el sistema para luego mostrarlos en el frontend
-
-  // quitar
-  // getLocationfetche = () => {  
-  //   fetch (`${myJson['url']}/fleet/location/data`).then(res => res.json()).then(res => {
-  //     this.setState({
-  //       locationData: res,
-  //     });
-  //   }).catch(function(error) {
-  //     DialogUtility.alert( {
-  //       content:"Ocurrio un error al traer las locaciónes disponibles. Contacte con el administrador.",
-  //       title : 'Información'
-  //     })
-  //   });
-  // }
-
-  // quitar
-  // getEmployeefetche = () => {  
-  //   fetch (`${myJson['url']}/fleet/employeeDrive/data`).then(res => res.json()).then(res => {
-  //     this.setState({
-  //       employeeData: res,
-  //     });
-  //   }).catch(function(error) {
-  //     DialogUtility.alert( {
-  //       content:"Ocurrio un error al traer los empleados #####disponibles. Contacte con el administrador.",
-  //       title : 'Información'
-  //     })
-  //   });
-  // }
-
-
-  // quitar
-  // getParticipantsfetche = () => {  
-  //   fetch (`${myJson['url']}/fleet/participant/data`).then(res => res.json()).then(res => {
-  //     this.setState({
-  //       participantData: res,
-  //     });
-  //   }).catch(function(error) {
-  //     DialogUtility.alert( {
-  //       content:"Ocurrio un error al traer los participantes disponibles. Contacte con el administrador.",
-  //       title : 'Información'
-  //     })
-  //   });
-  // }
-
-  // quitar
-  // getApplicantfetche = () => {  
-  //   fetch (`${myJson['url']}/applicant/data`).then(res => res.json()).then(res => {
-  //     this.setState({
-  //       applicantData: res,
-  //     });
-  //   }).catch(function(error) {
-  //     // DialogUtility.alert( {
-  //     //   content:"Ocurrio un error al traer los solicitantes disponibles. Contacte con el administrador.",
-  //     //   title : 'Información'
-  //     // })
-  //   });
-  // }
-  
 
 
   async getEmployeefetcheasync(){  
@@ -466,33 +386,6 @@ class App extends React.Component {
       })
     });
   }
-
-  // quitar
-  // // peticion get al backend para el equipo que se puede utilizar
-  // getInventoryfetche = () => {  
-  //   fetch (`${myJson['url']}/inventory/data`).then(res => res.json()).then(res => {
-  //     this.setState({
-  //       inventoryData: res,
-  //     });
-  //   }).catch(function(error) {
-  //     // DialogUtility.alert( {
-  //     //   content:"Ocurrio un error al traer los requerimientos. Contacte con el administrador.",
-  //     //   title : 'Información'
-  //     // })
-  //   });
-  // }
-
-  // get_dialog(){
-  //   return DialogUtility.alert({
-  //     title: 'Alert Dialog',
-  //     content: "This is an Alert Dialog!",
-  //     okButton: {  text: 'OK', click: okClick.bind(this) },
-  //     showCloseIcon: true,
-  //     closeOnEscape: true,
-  //     animationSettings: { effect: 'Zoom' }
-  //   });
-  // }
-  
   
   // peticion post al backend
   async setfetche(arg) {  
@@ -529,10 +422,19 @@ class App extends React.Component {
 
     // create ================================ test 222
     if (arg.requestType === 'eventCreate') {
-      if (arg.data[0].cnaQunatityParticipants === undefined) {
-        arg.data[0].cnaQunatityParticipants = 1
+      // quitar
+      // if (arg.data[0].cnaQunatityParticipants === undefined) {
+      //   arg.data[0].cnaQunatityParticipants = 1
+      // }
+      
+      var e = document.querySelector('.e-multi-hidden');
+      var option_array = []
+      for (let index = 0; index < e.options.length; index++) {
+        option_array.push(e.options[index].value)
+        
       }
-      console.log('esta es la data post =============>', arg.data[0] )
+      arg.data[0].cnaParticipants = option_array
+      
       let data_post = {
         data:arg.data[0],
       }
@@ -618,34 +520,11 @@ class App extends React.Component {
 
       
       var e = document.querySelector('.e-multi-hidden');
-
       var option_array = []
-      
       for (let index = 0; index < e.options.length; index++) {
         option_array.push(e.options[index].value)
         
       }
-      
-
-      console.log('data write ==========66666666==========>',  option_array )
-      
-      // e.options.forEach((optionElement) => { 
-      //   // 
-      //   console.log('numero de opciones =====11111#####')
-      // })  
-
-      
-      // var value = e.options[0].value;
-      // var text = e.options[0].text;
-
-      // var value1 = e.options[1].value;
-      // var text1 = e.options[0].text;
-
-      // var value2 = e.options[2].value;
-      // var text2 = e.options[0].text;
-      
-      
-
       arg.data.cnaParticipants = option_array
       
       console.log('data write ==========777777777==========>', arg.data.cnaParticipants)
@@ -733,15 +612,6 @@ class App extends React.Component {
         return false
       });
 
-
-
-
-
-
-
-
-        
-
     }
 
     // }).catch(function(error) {
@@ -821,9 +691,6 @@ class App extends React.Component {
     // args.data.state
 
 
-    console.log ('arreglo de colres ========>', this.state['romsData'] , args )
-    
-    
     if (args.data.state === 'request') {
       state_translation = 'SOLICITUD'
     }
@@ -839,7 +706,6 @@ class App extends React.Component {
       }
     })  
 
-    console.log('state header ======#$$$#########>', style_state )
 
     var style_font_general = "color:white"
     if (args.data.CategoryColor === undefined ) {
@@ -856,11 +722,11 @@ class App extends React.Component {
     }
     
 
-    console.log('data state =============$$$$$$$$$$$$$=============>', style_font_general  )
     
-
     var cnaDriveName = ''
     var cnaVehicleName = ''
+    var cnaProgramaticName = ''
+    
     if (args.data.cnaDriveName) {
       cnaDriveName = args.data.cnaDriveName
     }
@@ -868,9 +734,13 @@ class App extends React.Component {
     if (args.data.cnaVehicleName) {
       cnaVehicleName = args.data.cnaVehicleName
     }
+
+    if (args.data.cnaProgramaticName) {
+      cnaProgramaticName = args.data.cnaProgramaticName
+    }
     
-    
-    args.element.innerHTML =  "<div class=\"e-appointment-details\"> <h6 style = "+ style_state + " >"+  state_translation +"</h6> <div class=\"e-subject\"  style = " + style_font_general + ">" + name_employee + "</div> <div style = "+ style_font_general +" class=\"e-subject\">" + cnaDriveName + "</div><div  style = "+ style_font_general + " class=\"e-time\">" + cnaVehicleName  + "</div>" + "<div  style = "+ style_font_general + " class=\"e-time\">" + cnaVehicleName  + "</div>"   +"</div>"
+
+    args.element.innerHTML =  "<div class=\"e-appointment-details\"> <h6 style = "+ style_state + " >"+  state_translation +"</h6> <div class=\"e-subject\"  style = " + style_font_general + ">" + name_employee + "</div> <div style = "+ style_font_general +" class=\"e-subject\">" + cnaDriveName + "</div><div  style = "+ style_font_general + " class=\"e-time\">" + cnaVehicleName  + "</div>" + "<div  style = "+ style_font_general + " class=\"e-time\">" + cnaProgramaticName  + "</div>"   +"</div>"
     
     
     args.element.style.backgroundColor = args.data.CategoryColor;
@@ -889,25 +759,7 @@ class App extends React.Component {
   // fetch al recargar el doom
   componentDidMount(prevProps) {
     this.getfetche();
-    // quitar
-    // this.getRoomfetche();
     this.getAllObjectfetche();
-    // this.getEmployeefetche();
-    // quitar
-    // this.getLocationfetche();
-    // quitar 
-    // this.getParticipantsfetche();
-    // this.getApplicantfetche()
-    // this.getEmployeefetcheasync();
-    // this.getInventoryfetche();
-    // const optionListMany2Tags =[{ Game: "Game 1", Id: 1 }, { Game: "Game 2", Id: 2 }];
-    // let multiSelectComponent = new MultiSelectComponent({
-    //   dataSource: optionListMany2Tags,
-    //   fields: { text: 'Game', value: 'Id' },
-    //   placeholder: 'm2m tags',
-    //   change: this.props.onChange // Asignamos la función onChange a la propiedad change
-    // });
-    // multiSelectComponent.appendTo(this.multiSelectRef.current);
   };
 
   onPopupOpen(args) {
@@ -1197,34 +1049,6 @@ class App extends React.Component {
         // document.getElementById('cnaToken').setAttribute('aria-required', 'true')
       }
       
-      // quitar
-      // for (var obj_i in this.state.scheduleData) {
-      //   if (this.state.scheduleData[obj_i]['Id']  === args.data.Id) {
-      //     for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
-            
-      //       if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
-      //         if ( this.state.scheduleData[obj_i]['cnaInventory'] &&  this.state.scheduleData[obj_i]['cnaInventory'].includes(  parseInt(document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id.replace('cnaInventory_', ''), 10)  ) ) {
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist e-active')
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', true)
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', true)
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons e-check')
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', true)
-      //         }
-      //         else{
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
-      //           document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
-      //         }
-
-      //       }
-      //     }
-      //   }
-      // }
-
-      
-
       //ventana de eventos nueva 
       // resetea los check box
       if ( args.data.Id === undefined ) {
@@ -1232,19 +1056,6 @@ class App extends React.Component {
         document.getElementsByClassName('e-float-input e-control-wrapper e-input-group e-ddl e-lib e-keyboard')[3].setAttribute('style', 'display:None;')
         
         this.requiredfields(true)
-        // quitar
-        // document.getElementById('cnaRoom').setAttribute('style', 'display:None;')
-        // resetea los elementos seleccionados en el checBox
-        // for (var select_var in document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")) {
-        //   if (document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].id  != undefined) {
-        //     document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('class', 'e-list-item e-level-1 e-checklist')
-        //     document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-selected', false)
-        //     document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].setAttribute('aria-checked', false)
-        //     document.getElementById('cnaInventory').getElementsByClassName("e-checkbox-wrapper e-css e-listview-checkbox e-checkbox-left")[select_var].getElementsByClassName("e-frame e-icons")[0].setAttribute('class', 'e-frame e-icons')
-        //     document.getElementById('cnaInventory').getElementsByClassName("e-list-item e-level-1 e-checklist")[select_var].setAttribute('aria-selected', false)
-        //   }
-        // }
-        
         arrayParticipant = this.state.participantData
         const optionListMany2Tags = arrayParticipant 
 
